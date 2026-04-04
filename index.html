@@ -3,19 +3,33 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body { margin:0; background:black; overflow:hidden; }
+body { margin:0; overflow:hidden; background:black; }
+#popup {
+  position:absolute;
+  top:20px;
+  left:20px;
+  background:#111;
+  color:white;
+  padding:10px;
+  display:none;
+  border-radius:10px;
+}
+img { max-width:200px; }
 </style>
 </head>
 <body>
 
+<div id="popup"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
 
 <script>
+// ------------------ BASIC SCENE ------------------
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 camera.position.z = 3;
-
 const renderer = new THREE.WebGLRenderer({ antialias:true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -25,29 +39,81 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(5,3,5);
 scene.add(light);
 
-// TEXTURE (VERY IMPORTANT — reliable source)
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  "https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg"
+// ORBIT CONTROLS
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// ------------------ GLOBE ------------------
+const texture = new THREE.TextureLoader().load('/images/earth.jpg'); // your custom globe image
+const globe = new THREE.Mesh(
+  new THREE.SphereGeometry(1, 64, 64),
+  new THREE.MeshPhongMaterial({ map: texture })
 );
-
-// SPHERE (THE GLOBE)
-const geometry = new THREE.SphereGeometry(1, 64, 64);
-const material = new THREE.MeshPhongMaterial({ map: texture });
-const globe = new THREE.Mesh(geometry, material);
-
 scene.add(globe);
 
-// ROTATION
-function animate() {
+// ------------------ COUNTRY POINTS ------------------
+// List of countries with lat/lng
+const countries = [
+  { name: "Saudi Arabia", lat:25, lng:45 },
+  { name: "USA", lat:38, lng:-97 },
+  { name: "Japan", lat:36, lng:138 }
+];
+
+// Convert lat/lng to 3D vector
+function latLngToVector3(lat, lng, radius=1){
+  const phi = (90-lat)*(Math.PI/180);
+  const theta = (lng+180)*(Math.PI/180);
+  return new THREE.Vector3(
+    -radius*Math.sin(phi)*Math.cos(theta),
+    radius*Math.cos(phi),
+    radius*Math.sin(phi)*Math.sin(theta)
+  );
+}
+
+// Create dots for countries
+const markers = [];
+countries.forEach(c => {
+  const dot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.02, 16,16),
+    new THREE.MeshBasicMaterial({color:0xff0000})
+  );
+  dot.position.copy(latLngToVector3(c.lat, c.lng, 1.02));
+  dot.userData = c;
+  scene.add(dot);
+  markers.push(dot);
+});
+
+// ------------------ CLICK DETECTION ------------------
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+window.addEventListener("click", (event)=>{
+  mouse.x = (event.clientX / window.innerWidth)*2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight)*2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(markers);
+  if(intersects.length>0){
+    const data = intersects[0].object.userData;
+    const popup = document.getElementById("popup");
+
+    // Load local image automatically: name must match country
+    const imagePath = `/images/${data.name.replace(/ /g,"_")}.jpeg`; // e.g., USA.jpeg, Saudi_Arabia.jpeg
+    popup.innerHTML = `<h3>${data.name}</h3><img src="${imagePath}">`;
+    popup.style.display="block";
+  }
+});
+
+// ------------------ ANIMATE ------------------
+function animate(){
   requestAnimationFrame(animate);
-  globe.rotation.y += 0.002;
+  globe.rotation.y += 0.001;
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
 
-// RESIZE
-window.addEventListener('resize', () => {
+// ------------------ RESIZE ------------------
+window.addEventListener("resize", ()=>{
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
