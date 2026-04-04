@@ -6,15 +6,17 @@
 body { margin:0; overflow:hidden; background:black; }
 #popup {
   position:absolute;
-  top:20px;
-  left:20px;
+  top:0;
+  left:0;
   background:#111;
   color:white;
   padding:10px;
   display:none;
   border-radius:10px;
+  pointer-events:none;
+  transform:translate(-50%, -120%);
 }
-img { max-width:200px; }
+img { max-width:200px; display:block; }
 </style>
 </head>
 <body>
@@ -23,13 +25,13 @@ img { max-width:200px; }
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
 
 <script>
 // ------------------ BASIC SCENE ------------------
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.z = 3;
+camera.position.set(0,0,3);
+
 const renderer = new THREE.WebGLRenderer({ antialias:true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -39,38 +41,29 @@ const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(5,3,5);
 scene.add(light);
 
-// ORBIT CONTROLS
+// CONTROLS
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
+controls.dampingFactor = 0.1;
+controls.enablePan = false;
+controls.minDistance = 1.5;
+controls.maxDistance = 5;
 
 // ------------------ GLOBE ------------------
-const texture = new THREE.TextureLoader().load('/images/earth.jpg'); // your custom globe image
+const globeTexture = new THREE.TextureLoader().load('/images/earth.jpg'); // your earth texture
 const globe = new THREE.Mesh(
   new THREE.SphereGeometry(1, 64, 64),
-  new THREE.MeshPhongMaterial({ map: texture })
+  new THREE.MeshPhongMaterial({ map: globeTexture })
 );
 scene.add(globe);
 
-// ------------------ COUNTRY POINTS ------------------
-// List of countries with lat/lng
+// ------------------ COUNTRY MARKERS ------------------
 const countries = [
-  { name: "Saudi Arabia", lat:25, lng:45 },
-  { name: "USA", lat:38, lng:-97 },
-  { name: "Japan", lat:36, lng:138 }
+  { name:"Saudi Arabia", lat:25, lng:45 },
+  { name:"USA", lat:38, lng:-97 },
+  { name:"Japan", lat:36, lng:138 }
 ];
 
-// Convert lat/lng to 3D vector
-function latLngToVector3(lat, lng, radius=1){
-  const phi = (90-lat)*(Math.PI/180);
-  const theta = (lng+180)*(Math.PI/180);
-  return new THREE.Vector3(
-    -radius*Math.sin(phi)*Math.cos(theta),
-    radius*Math.cos(phi),
-    radius*Math.sin(phi)*Math.sin(theta)
-  );
-}
-
-// Create dots for countries
 const markers = [];
 countries.forEach(c => {
   const dot = new THREE.Mesh(
@@ -83,24 +76,63 @@ countries.forEach(c => {
   markers.push(dot);
 });
 
-// ------------------ CLICK DETECTION ------------------
+// lat/lng → 3D position
+function latLngToVector3(lat,lng,radius=1){
+  const phi = (90-lat)*(Math.PI/180);
+  const theta = (lng+180)*(Math.PI/180);
+  return new THREE.Vector3(
+    -radius*Math.sin(phi)*Math.cos(theta),
+    radius*Math.cos(phi),
+    radius*Math.sin(phi)*Math.sin(theta)
+  );
+}
+
+// ------------------ POPUP ------------------
+const popup = document.getElementById("popup");
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-window.addEventListener("click", (event)=>{
+function onClick(event){
   mouse.x = (event.clientX / window.innerWidth)*2 - 1;
   mouse.y = -(event.clientY / window.innerHeight)*2 + 1;
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(markers);
   if(intersects.length>0){
     const data = intersects[0].object.userData;
-    const popup = document.getElementById("popup");
-
-    // Load local image automatically: name must match country
-    const imagePath = `/images/${data.name.replace(/ /g,"_")}.jpeg`; // e.g., USA.jpeg, Saudi_Arabia.jpeg
+    const imagePath = `/images/${data.name.replace(/ /g,"_")}.jpeg`;
+    
     popup.innerHTML = `<h3>${data.name}</h3><img src="${imagePath}">`;
     popup.style.display="block";
+    
+    // Smooth zoom to country
+    const targetPos = intersects[0].object.position.clone().multiplyScalar(2.5);
+    gsap.to(camera.position, { 
+      x: targetPos.x, 
+      y: targetPos.y, 
+      z: targetPos.z, 
+      duration: 1.5, 
+      onUpdate: () => camera.lookAt(globe.position)
+    });
   }
+}
+
+window.addEventListener('click', onClick);
+
+// ------------------ HOVER ------------------
+function updatePopup(){
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(markers);
+  if(intersects.length>0){
+    const vector = intersects[0].object.position.clone();
+    vector.project(camera);
+    popup.style.left = ((vector.x+1)/2*window.innerWidth)+'px';
+    popup.style.top = ((-vector.y+1)/2*window.innerHeight)+'px';
+  }
+}
+
+window.addEventListener('mousemove',(event)=>{
+  mouse.x = (event.clientX / window.innerWidth)*2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight)*2 + 1;
 });
 
 // ------------------ ANIMATE ------------------
@@ -108,16 +140,22 @@ function animate(){
   requestAnimationFrame(animate);
   globe.rotation.y += 0.001;
   controls.update();
+  updatePopup();
   renderer.render(scene, camera);
 }
 animate();
 
 // ------------------ RESIZE ------------------
-window.addEventListener("resize", ()=>{
+window.addEventListener("resize",()=>{
   camera.aspect = window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// ------------------ OPTIONAL: GSAP FOR SMOOTH ZOOM ------------------
+const gsapScript = document.createElement('script');
+gsapScript.src = "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js";
+document.head.appendChild(gsapScript);
 </script>
 
 </body>
