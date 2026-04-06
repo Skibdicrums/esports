@@ -422,42 +422,28 @@
         }
         twinkle();
 
-       const markerGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-        const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-       const radius = 1.05;
+      // Saudi Arabia coordinates in radians
+const lat = THREE.MathUtils.degToRad(24.7136);
+const lon = THREE.MathUtils.degToRad(46.6753);
+
+const markerGeometry = new THREE.SphereGeometry(0.05, 32, 32); // smaller sphere
+const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+
+const radius = 1.05;
 marker.position.set(
     radius * Math.cos(lat) * Math.cos(lon),
     radius * Math.sin(lat),
     radius * Math.cos(lat) * Math.sin(lon)
 );
-        scene.add(marker);
+scene.add(marker);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        camera.position.z = 2.5;
-
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
-
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        const menu = document.getElementById('menu');
-
-        menu.addEventListener('click', (e) => e.stopPropagation());
 window.addEventListener('click', (event) => {
-    if (menu.contains(event.target)) return;
-
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(marker);
+    const intersects = raycaster.intersectObject(marker, true); // include children
 
     if (intersects.length > 0) {
         menu.style.display = 'block';
