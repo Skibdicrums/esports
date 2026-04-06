@@ -9,8 +9,15 @@
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0; 
-            background-color: #000; 
+            background: linear-gradient(-45deg, #0a0a0a, #1a1a2e, #0f0f23, #000000);
+            background-size: 400% 400%;
+            animation: bgMove 15s ease infinite;
             overflow: hidden; 
+        }
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         canvas { display: block; }
         .signature {
@@ -21,6 +28,11 @@
             font-family: 'Segoe UI', sans-serif;
             font-size: 18px;
             z-index: 10;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px #00ffff; }
+            50% { opacity: 0.7; text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff; }
         }
         #popupPhoto {
             position: absolute;
@@ -47,12 +59,16 @@
             color: #fff;
             font-family: Arial, sans-serif;
             box-shadow: none;
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.8s ease-out, glow 3s ease-in-out infinite alternate;
             overflow-y: auto;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.9); filter: blur(10px); }
+            to { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #00ffff; }
+            to { box-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff, 0 0 80px #00ffff; }
         }
         .menu-header {
             text-align: center;
@@ -193,20 +209,41 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
         .choice-button:hover {
             background: linear-gradient(135deg, #00cccc, #009999);
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
+        }
+        .choice-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .choice-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .choice-button:active::before {
+            width: 300px;
+            height: 300px;
         }
         .main-menu {
             height: 100vh;
             display: flex;
             flex-direction: column;
             background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
-            border: 1px solid #00ffff;
-            box-shadow: 0 0 20px #00ffff;
-            backdrop-filter: blur(10px);
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px #00ffff, inset 0 0 20px rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
         }
         .choice-screen {
             display: flex;
@@ -228,6 +265,11 @@
             font-size: 36px;
             margin-bottom: 40px;
             text-shadow: 0 0 10px #00ffff;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px #00ffff; }
+            to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
         }
     </style>
 </head>
@@ -370,25 +412,19 @@
             positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
             positions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
         }
-        starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1 });
+        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1, transparent: true });
         const stars = new THREE.Points(starGeometry, starMaterial);
         scene.add(stars);
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 64;
-        canvas.height = 64;
-        ctx.fillStyle = '#ffff00';
-        ctx.beginPath();
-        ctx.arc(32, 32, 12, 0, Math.PI * 2);
-        ctx.fill();
+        function twinkle() {
+            starMaterial.opacity = 0.3 + Math.random() * 0.7;
+            setTimeout(twinkle, 100 + Math.random() * 200);
+        }
+        twinkle();
 
-        const spriteTexture = new THREE.CanvasTexture(canvas);
-        const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture, transparent: true });
-        const marker = new THREE.Sprite(spriteMaterial);
-        marker.scale.set(0.16, 0.16, 1);
-
+        const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
+        const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
         marker.position.x = Math.cos(lat) * 1.05;
         marker.position.y = Math.sin(lat) * 1.05;
         marker.position.z = 0;
