@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8" />ON
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <title>3D Globe with 360 Photo</title>
@@ -303,7 +303,7 @@
             </div>
             <div class="tab-content">
                 <div id="roster" class="tab-pane active">
-                    <h2 data-en="EWC 2026 Rosters" data-ar="روسترات EWC 2026">EWC 2026 Rosters</h2>
+            <h2 data-en="Falcons Roster" data-ar="روستر فالكونز">Falcons Roster</h2>
                     <div class="game">
                         <h3 data-en="🔫 Counter-Strike 2" data-ar="🔫 Counter-Strike 2">🔫 Counter-Strike 2</h3>
                         <ul>
@@ -422,12 +422,15 @@
         }
         twinkle();
 
-        const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
+       const markerGeometry = new THREE.SphereGeometry(0.1, 32, 32);
         const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-        marker.position.x = Math.cos(lat) * 1.05;
-        marker.position.y = Math.sin(lat) * 1.05;
-        marker.position.z = 0;
+       const radius = 1.05;
+marker.position.set(
+    radius * Math.cos(lat) * Math.cos(lon),
+    radius * Math.sin(lat),
+    radius * Math.cos(lat) * Math.sin(lon)
+);
         scene.add(marker);
 
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -447,21 +450,23 @@
         const menu = document.getElementById('menu');
 
         menu.addEventListener('click', (e) => e.stopPropagation());
+window.addEventListener('click', (event) => {
+    if (menu.contains(event.target)) return;
 
-        window.addEventListener('click', (event) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObject(marker, true);
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-            if (intersects.length > 0) {
-                menu.style.display = 'block';
-                choiceScreen.style.display = 'flex';
-                mainMenu.style.display = 'none';
-            } else {
-                menu.style.display = 'none';
-            }
-        });
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(marker);
+
+    if (intersects.length > 0) {
+        menu.style.display = 'block';
+        choiceScreen.style.display = 'flex';
+        mainMenu.style.display = 'none';
+    } else {
+        menu.style.display = 'none';
+    }
+});
 
         // Choice functionality
         const choiceScreen = document.querySelector('.choice-screen');
