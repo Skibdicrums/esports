@@ -1,48 +1,258 @@
-<!-- Modified HTML file -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>esport project</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Globe with 360 Photo</title>
     <style>
-        body { margin: 0; position: relative; background-color: #f0f0f0; }
+        body { margin: 0; background-color: #000; overflow: hidden; }
         canvas { display: block; }
         .signature {
             position: absolute;
             bottom: 10px;
             right: 10px;
             color: #23f8ca;
-            font-family: Gabriola, Gabriola;
+            font-family: Gabriola, sans-serif;
             font-size: 26px;
             z-index: 10;
         }
-        #volume-control {
+        #popupPhoto {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             left: 10px;
-            z-index: 10;
+            width: 420px;
+            height: 280px;
+            border: 2px solid #fff;
+            display: none;
+            z-index: 20;
+            background: #000;
+        }
+        .menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border: none;
+            border-radius: 0;
+            display: none;
+            z-index: 20;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            box-shadow: none;
+            animation: fadeIn 0.5s ease-in-out;
+            overflow-y: auto;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .menu-header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #23f8ca;
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .close-button:hover {
+            background: #1abc9c;
+        }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .language-switch select {
+            background: #23f8ca;
+            color: #000;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .menu-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #23f8ca;
+            text-shadow: 0 0 10px #23f8ca;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .tab-button.active {
+            background: #23f8ca;
+            color: #000;
+            font-weight: bold;
+        }
+        .tab-button:hover {
+            background: rgba(35, 248, 202, 0.3);
+        }
+        .tab-content {
+            padding: 20px;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .game {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .game h3 {
+            margin-top: 0;
+            color: #23f8ca;
+        }
+        .game ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .game li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .achievements-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .achievements-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="signature">By mrmr</div>
-    <div id="volume-control">
-        <button id="volume-on">🔇</button>
-        <button id="volume-off" style="display: none;">🔊</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5"> 
+    <div class="signature">By rmrm</div>
+    <div id="menu" class="menu">
+        <div class="menu-header">
+            <button class="close-button" id="closeButton">✕</button>
+            <div class="language-switch">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <h1 data-en="🦅 Team Falcons Hub" data-ar="🦅 مركز فريق فالكونز">🦅 Team Falcons Hub</h1>
+        </div>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="roster" data-en="🏆 Roster" data-ar="🏆 روستر">🏆 Roster</button>
+            <button class="tab-button" data-tab="achievements" data-en="🎖️ Achievements" data-ar="🎖️ إنجازات">🎖️ Achievements</button>
+            <button class="tab-button" data-tab="history" data-en="📜 History" data-ar="📜 تاريخ">📜 History</button>
+        </div>
+        <div class="tab-content">
+            <div id="roster" class="tab-pane active">
+                <h2 data-en="EWC 2026 Rosters" data-ar="روسترات EWC 2026">EWC 2026 Rosters</h2>
+                <div class="game">
+                    <h3 data-en="🔫 Counter-Strike 2" data-ar="🔫 Counter-Strike 2">🔫 Counter-Strike 2</h3>
+                    <ul>
+                        <li>NiKo</li>
+                        <li>m0NESY</li>
+                        <li>kyxsan</li>
+                        <li>TeSeS</li>
+                        <li>kyousuke</li>
+                    </ul>
+                </div>
+                <div class="game">
+                    <h3 data-en="🚗 Rocket League" data-ar="🚗 Rocket League">🚗 Rocket League</h3>
+                    <ul>
+                        <li>dralii</li>
+                        <li>Kiileerrz</li>
+                        <li>Rw9</li>
+                    </ul>
+                </div>
+                <div class="game">
+                    <h3 data-en="🪂 Apex Legends" data-ar="🪂 Apex Legends">🪂 Apex Legends</h3>
+                    <ul>
+                        <li>ImperialHal</li>
+                        <li>Zer0</li>
+                        <li>Wxltzyy</li>
+                    </ul>
+                </div>
+                <div class="game">
+                    <h3 data-en="🔫 PUBG (PC)" data-ar="🔫 PUBG (PC)">🔫 PUBG (PC)</h3>
+                    <ul>
+                        <li>TGLTN</li>
+                        <li>hwinn</li>
+                        <li>Shrimzy</li>
+                        <li>M1ME</li>
+                    </ul>
+                </div>
+                <div class="game">
+                    <h3 data-en="📱 Mobile Legends" data-ar="📱 Mobile Legends">📱 Mobile Legends</h3>
+                    <ul>
+                        <li>Pheww</li>
+                        <li>FlapTzy</li>
+                        <li>Owgwen</li>
+                        <li>Super Marco</li>
+                        <li>KyleTzy</li>
+                    </ul>
+                </div>
+                <p data-en="Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet." data-ar="ألعاب أخرى: Dota 2، Valorant، Call of Duty، PUBG Mobile، Honor of Kings - الروسترات غير مؤكدة بعد.">Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet.</p>
+            </div>
+            <div id="achievements" class="tab-pane">
+                <h2 data-en="🏅 Major Achievements" data-ar="🏅 الإنجازات الرئيسية">🏅 Major Achievements</h2>
+                <ul class="achievements-list">
+                    <li data-en="🏆 Winner of EWC 2025 in Multiple Categories" data-ar="🏆 الفائز في EWC 2025 في فئات متعددة">🏆 Winner of EWC 2025 in Multiple Categories</li>
+                    <li data-en="🥇 Top Performer in CS2 World Championship" data-ar="🥇 الأداء الأعلى في بطولة CS2 العالمية">🥇 Top Performer in CS2 World Championship</li>
+                    <li data-en="🚀 Breakthrough in Rocket League Finals" data-ar="🚀 اختراق في نهائيات Rocket League">🚀 Breakthrough in Rocket League Finals</li>
+                    <li data-en="💎 Apex Legends Global Champions" data-ar="💎 أبطال Apex Legends العالميون">💎 Apex Legends Global Champions</li>
+                    <li data-en="🔥 PUBG Masters Series Victories" data-ar="🔥 انتصارات سلسلة PUBG Masters">🔥 PUBG Masters Series Victories</li>
+                    <li data-en="📱 Mobile Legends Regional Dominance" data-ar="📱 هيمنة Mobile Legends الإقليمية">📱 Mobile Legends Regional Dominance</li>
+                    <li data-en="🌟 Rising Star in Esports Scene" data-ar="🌟 نجم صاعد في مشهد الرياضات الإلكترونية">🌟 Rising Star in Esports Scene</li>
+                </ul>
+            </div>
+            <div id="history" class="tab-pane">
+                <h2 data-en="📖 Team History" data-ar="📖 تاريخ الفريق">📖 Team History</h2>
+                <p data-en="Team Falcons, formerly known as Riyadh Falcons, is a powerhouse in the esports industry, representing Saudi Arabia with pride. Founded with a vision to dominate global competitions, the team has rapidly risen through the ranks." data-ar="فريق فالكونز، المعروف سابقًا باسم رياض فالكونز، هو قوة في صناعة الرياضات الإلكترونية، يمثل المملكة العربية السعودية بفخر. تأسس الفريق برؤية للسيطرة على المنافسات العالمية، وقد ارتفع بسرعة في الرتب.">Team Falcons, formerly known as Riyadh Falcons, is a powerhouse in the esports industry, representing Saudi Arabia with pride. Founded with a vision to dominate global competitions, the team has rapidly risen through the ranks.</p>
+                <p data-en="In 2025, Falcons achieved unprecedented success, securing victories in key tournaments and establishing themselves as a force to be reckoned with. As we approach EWC 2026, the team continues to innovate and build on its legacy." data-ar="في عام 2025، حقق فالكونز نجاحًا غير مسبوق، محققًا انتصارات في بطولات رئيسية ويؤسس نفسه كقوة يجب الحذر منها. مع اقترابنا من EWC 2026، يستمر الفريق في الابتكار وبناء إرثه.">In 2025, Falcons achieved unprecedented success, securing victories in key tournaments and establishing themselves as a force to be reckoned with. As we approach EWC 2026, the team continues to innovate and build on its legacy.</p>
+                <p data-en="With a roster of elite players and a commitment to excellence, Team Falcons is poised to make history once again." data-ar="مع قائمة من اللاعبين النخبة والالتزام بالتميز، يستعد فريق فالكونز لصنع التاريخ مرة أخرى.">With a roster of elite players and a commitment to excellence, Team Falcons is poised to make history once again.</p>
+            </div>
+        </div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
     <script>
-        // Scene Setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Create the Earth
+        const lat = 24.7136 * Math.PI / 180;
+        const lon = 46.6753 * Math.PI / 180;
+
         const earthGeometry = new THREE.SphereGeometry(1, 1024, 1024);
         const earthMaterial = new THREE.MeshPhongMaterial({
             map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg'),
@@ -50,97 +260,112 @@
             bumpScale: 0.005
         });
         const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+        earth.rotation.y = -lon;
         scene.add(earth);
 
-        // Create the background
-        const galaxyGeometry = new THREE.SphereGeometry(2048, 2048, 2048);
+        const galaxyGeometry = new THREE.SphereGeometry(2048, 64, 64);
         const galaxyMaterial = new THREE.MeshBasicMaterial({
-            map: new THREE.TextureLoader().load(''),
+            color: 0x000011,
             side: THREE.BackSide
         });
         const galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
         scene.add(galaxy);
 
-        // Create the satellites
-        const satelliteGeometry = new THREE.SphereGeometry(0.005, 0.5, 0.5);
-        const satelliteMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const satellites = [];
-        const numSatellites = 7;
-        const earthRadius = 50; 
-        const leoAltitude = 1.5; 
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 64;
+        canvas.height = 64;
+        ctx.fillStyle = '#ffff00';
+        ctx.beginPath();
+        ctx.arc(32, 32, 12, 0, Math.PI * 2);
+        ctx.fill();
 
-        for (let i = 0; i < numSatellites; i++) {
-            const satellite = new THREE.Mesh(satelliteGeometry, satelliteMaterial);
-            satellites.push(satellite);
-            scene.add(satellite);
-        }
+        const spriteTexture = new THREE.CanvasTexture(canvas);
+        const spriteMaterial = new THREE.SpriteMaterial({ map: spriteTexture, transparent: true });
+        const marker = new THREE.Sprite(spriteMaterial);
+        marker.scale.set(0.16, 0.16, 1);
 
-        // Create the ambient and directional lights
-        const ambientLight = new THREE.AmbientLight(0x333333);
+        marker.position.x = Math.cos(lat) * 1.05;
+        marker.position.y = Math.sin(lat) * 1.05;
+        marker.position.z = 0;
+        scene.add(marker);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(0, 0, -1).normalize();
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 5, 5);
         scene.add(directionalLight);
 
-        // Camera Position
-        camera.position.x = 2;
+        camera.position.z = 2.5;
 
-        // OrbitControls
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
-        controls.enableZoom = true;
 
-        // Animation
-        let rotationSpeed = 0.001;  //0.001
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const menu = document.getElementById('menu');
+
+        menu.addEventListener('click', (e) => e.stopPropagation());
+
+        window.addEventListener('click', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(marker, true);
+
+            if (intersects.length > 0) {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                button.classList.add('active');
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Language switch functionality
+        const languageSelect = document.getElementById('languageSelect');
+        const translatableElements = document.querySelectorAll('[data-en], [data-ar]');
+
+        languageSelect.addEventListener('change', (event) => {
+            const lang = event.target.value;
+            translatableElements.forEach(element => {
+                if (element.hasAttribute(`data-${lang}`)) {
+                    element.textContent = element.getAttribute(`data-${lang}`);
+                }
+            });
+        });
+
+        // Close button functionality
+        const closeButton = document.getElementById('closeButton');
+        closeButton.addEventListener('click', () => {
+            menu.style.display = 'none';
+        });
+
         function animate() {
             requestAnimationFrame(animate);
-            earth.rotation.y += rotationSpeed;
-            for (let i = 0; i < satellites.length; i++) {
-                satellites[i].rotation.y += rotationSpeed * 1; 
-                satellites[i].position.x = Math.sin(Date.now() * 0.0005 + i) * 1.2;
-                satellites[i].position.z = Math.cos(Date.now() * 0.0005 + i) * 2;
-            }
             controls.update();
             renderer.render(scene, camera);
         }
-
-        // Resize Handling
-        window.addEventListener('resize', () => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-        }, false);
-
-        // Background Sound
-        const audio = new Audio('https://cdn.pixabay.com/download/audio/2025/01/26/audio_f562bfcb32.mp3?filename=daylight-piano-music-292993.mp3');
-        audio.loop = true;
-        audio.volume = 0.5;
-
-        // Volume Control
-        const volumeOnButton = document.getElementById('volume-on');
-        const volumeOffButton = document.getElementById('volume-off');
-        const volumeSlider = document.getElementById('volume-slider');
-
-        volumeOnButton.addEventListener('click', () => {
-            audio.play();
-            volumeOnButton.style.display = 'none';
-            volumeOffButton.style.display = 'block';
-        });
-
-        volumeOffButton.addEventListener('click', () => {
-            audio.pause();
-            volumeOnButton.style.display = 'block';
-            volumeOffButton.style.display = 'none';
-        });
-
-        volumeSlider.addEventListener('input', () => {
-            audio.volume = volumeSlider.value;
-        });
-
         animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
