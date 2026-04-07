@@ -59,17 +59,18 @@
             z-index: 20;
             background: #000;
         }
-        .menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            display: none;
-            z-index: 20;
+       .main-menu {
+    position: fixed;      /* stay on screen */
+    top: 0;
+    left: 0;
+    width: 100vw;         /* full width of viewport */
+    height: 100vh;        /* full height of viewport */
+    display: flex;        /* center content if needed */
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a;  /* example background */
+    box-shadow: 0 0 40px 10px rgba(255, 255, 255, 0.5); /* glow */
+    z-index: 1000;        /* ensure on top of other content */
             color: #fff;
             font-family: Arial, sans-serif;
             box-shadow: none;
