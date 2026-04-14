@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+Z<html lang="en">
 <head>
     <meta charset="UTF-8" />ON
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,9 +9,8 @@
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0; 
-            background: linear-gradient(-45deg, #0a0a0a, #1a1a2e, #0f0f23, #000000);
-            background-size: 400% 400%;
-            animation: bgMove 15s ease infinite;
+            background: #000000 url('file:///C:/Users/afm74/Downloads/image.jpg') center center / cover no-repeat fixed;
+            animation: none;
             overflow: hidden; 
         }
         @keyframes bgMove {
@@ -44,9 +43,6 @@
             pointer-events: none;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
         }
-        #menu {
-            display: none;
-        }
         @keyframes pulse {
             0%, 100% { opacity: 1; text-shadow: 0 0 5px #00ffff; }
             50% { opacity: 0.7; text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff; }
@@ -62,30 +58,33 @@
             z-index: 20;
             background: #000;
         }
-       .main-menu {
+        .menu {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(95vw, 1000px);
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            background: rgba(10, 14, 30, 0.88);
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            border-radius: 24px;
-            box-shadow: 0 0 60px rgba(0, 255, 255, 0.15), inset 0 0 25px rgba(0, 255, 255, 0.08);
-            backdrop-filter: blur(18px);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            display: none;
+            z-index: 20;
             color: #fff;
             font-family: Arial, sans-serif;
+            box-shadow: none;
             animation: fadeIn 0.8s ease-out, glow 3s ease-in-out infinite alternate;
             overflow-y: auto;
-            padding: 24px;
-            z-index: 1000;
+        }
+        .country-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); filter: blur(10px); }
-            to { opacity: 1; transform: scale(1); filter: blur(0); }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         @keyframes glow {
             from { box-shadow: 0 0 20px #00ffff; }
@@ -94,10 +93,10 @@
         .menu-header {
             text-align: center;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 0;
             position: relative;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
         .close-button {
             position: absolute;
@@ -114,10 +113,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
         }
-        .hub-close-button {
-            right: 10px;
-            left: auto;
-        }
         .close-button:hover {
             background: linear-gradient(135deg, #00cccc, #009999);
             transform: scale(1.1);
@@ -132,9 +127,9 @@
         .tabs {
             display: flex;
             justify-content: space-around;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.1);
             padding: 10px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
         .tab-button {
             background: rgba(0, 255, 255, 0.1);
@@ -160,6 +155,7 @@
         }
         .tab-content {
             padding: 20px;
+            background: transparent;
         }
         .tab-pane {
             display: none;
@@ -170,11 +166,11 @@
         .game {
             margin-bottom: 20px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 15px;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.08);
         }
         .game h3 {
             margin-top: 0;
@@ -188,6 +184,12 @@
             padding: 5px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
+        .game-note p {
+            margin: 0;
+            color: #ffffff;
+            line-height: 1.6;
+            font-size: 16px;
+        }
         .achievements-list {
             list-style-type: none;
             padding: 0;
@@ -200,9 +202,9 @@
         .choice-buttons {
             display: flex;
             justify-content: space-around;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.1);
             padding: 10px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
         .choice-button {
             background: linear-gradient(135deg, #00ffff, #00cccc);
@@ -242,12 +244,23 @@
             width: 300px;
             height: 300px;
         }
-        .main-menu {
+        .choice-button .team-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .menu-panel {
+            min-height: 100vh;
+            height: auto;
+            width: 100%;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            background: rgba(10, 14, 30, 0.88);
+            background: rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0, 255, 255, 0.25);
-            box-shadow: 0 0 60px rgba(0, 255, 255, 0.15), inset 0 0 25px rgba(0, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.15), inset 0 0 15px rgba(0, 255, 255, 0.06);
             backdrop-filter: blur(18px);
         }
         .choice-screen {
@@ -276,6 +289,95 @@
             from { text-shadow: 0 0 10px #00ffff; }
             to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
         }
+        /* Countries hub – full greenish-blue override */
+        #menuAlt {
+            animation: fadeIn 0.8s ease-out, altGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes altGlow {
+            from { box-shadow: 0 0 20px #00d4a0; }
+            to   { box-shadow: 0 0 40px #00d4a0, 0 0 60px #00d4a0, 0 0 80px #00d4a0; }
+        }
+        #menuAlt .choice-screen h1 {
+            color: #00d4a0;
+            text-shadow: 0 0 10px #00d4a0;
+            animation: altTitleGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes altTitleGlow {
+            from { text-shadow: 0 0 10px #00d4a0; }
+            to   { text-shadow: 0 0 20px #00d4a0, 0 0 30px #00c890, 0 0 40px #00b878; }
+        }
+        #menuAlt .close-button {
+            background: linear-gradient(135deg, #00d4a0, #00a878);
+            color: #002a1a;
+            box-shadow: 0 4px 15px rgba(0, 212, 160, 0.3);
+        }
+        #menuAlt .close-button:hover {
+            background: linear-gradient(135deg, #00c890, #008f60);
+            box-shadow: 0 6px 20px rgba(0, 212, 160, 0.5);
+        }
+        #menuAlt .choice-button {
+            background: linear-gradient(135deg, #00d4a0, #00a878);
+            color: #002a1a;
+            box-shadow: 0 4px 15px rgba(0, 212, 160, 0.3);
+            border: none;
+        }
+        #menuAlt .choice-button:hover {
+            background: linear-gradient(135deg, #00c890, #008f60);
+            box-shadow: 0 6px 20px rgba(0, 212, 160, 0.5);
+        }
+        /* Main hub (POWR/Falcons) – match greenish-blue theme */
+        #menu {
+            animation: fadeIn 0.8s ease-out, altGlow 3s ease-in-out infinite alternate;
+        }
+        #menu .menu-header h1,
+        #menu .choice-screen h1 {
+            color: #00d4a0;
+            text-shadow: 0 0 10px #00d4a0;
+        }
+        #menu .close-button,
+        #menu .choice-button,
+        #menu .tab-button.active {
+            background: linear-gradient(135deg, #00d4a0, #00a878);
+            color: #002a1a;
+            box-shadow: 0 4px 15px rgba(0, 212, 160, 0.3);
+            border: none;
+        }
+        #menu .close-button:hover,
+        #menu .choice-button:hover,
+        #menu .tab-button.active:hover {
+            background: linear-gradient(135deg, #00c890, #008f60);
+            box-shadow: 0 6px 20px rgba(0, 212, 160, 0.5);
+        }
+        #menu .tab-button {
+            color: #00d4a0;
+            border: 1px solid #00d4a0;
+            background: rgba(0, 212, 160, 0.12);
+        }
+        #menu .tab-button:hover {
+            background: rgba(0, 212, 160, 0.22);
+            box-shadow: 0 2px 10px rgba(0, 212, 160, 0.3);
+        }
+        #menu .tab-content,
+        #menu .tab-content h2,
+        #menu .tab-content h3,
+        #menu .tab-content p,
+        #menu .tab-content li,
+        #menu .achievements-list li,
+        #menu .game-note p,
+        #menu .game h3,
+        #menu .game li,
+        #menu .menu-panel,
+        #menu .menu {
+            color: #00d4a0;
+        }
+        #menuAlt,
+        #menuAlt h1,
+        #menuAlt p,
+        #menuAlt li,
+        #menuAlt span,
+        #menuAlt .choice-screen {
+            color: #00d4a0;
+        }
     </style>
 </head>
 <body>
@@ -286,16 +388,17 @@
             <button class="close-button" id="closeChoiceBtn">✕</button>
             <h1>Choose Your Option</h1>
             <div class="choice-buttons">
-                <button class="choice-button" id="powrFalconsBtn">POWR</button>
-                <button class="choice-button" id="twistedMindsBtn">TWISTED MINDS</button>
-                <button class="choice-button" id="falconsBtn">FALCONS</button>
+                <button class="choice-button" id="powrFalconsBtn"><img class="team-logo" src="logos/powr.png" alt="POWR logo">POWR</button>
+                <button class="choice-button" id="twistedMindsBtn"><img class="team-logo" src="logos/twistedminds.png" alt="Twisted Minds logo">TWISTED MINDS</button>
+                <button class="choice-button" id="falconsBtn"><img class="team-logo" src="logos/falcons.png" alt="Falcons logo">FALCON</button>
+                <button class="choice-button" id="g2Btn" style="display: none;"><img class="team-logo" src="logos/g2.png" alt="G2 Esports logo">G2 Esports</button>
+                <button class="choice-button" id="hereticsBtn" style="display: none;"><img class="team-logo" src="logos/heretics.png" alt="Team Heretics logo">Team Heretics</button>
             </div>
         </div>
-        <div class="main-menu" style="display: none;">
+        <div class="menu-panel" style="display: none;">
             <div class="menu-header">
-                <button class="close-button" id="closeButton" title="Close Hub">✕</button>
-                <button class="close-button hub-close-button" id="closeHubButton" title="Close Hub">✕</button>
-                <h1>🦅 Team Falcons Hub</h1>
+                <button class="close-button" id="closeButton">✕</button>
+                <h1 data-en="🦅 Team Falcons Hub" data-ar="🦅 مركز فريق فالكونز">🦅 Team Falcons Hub</h1>
             </div>
             <div class="tabs">
                 <button class="tab-button active" data-tab="roster" data-en="🏆 Roster" data-ar="🏆 روستر">🏆 Roster</button>
@@ -304,76 +407,92 @@
             </div>
             <div class="tab-content">
                 <div id="roster" class="tab-pane active">
-            <h2 data-en="Falcons Roster" data-ar="روستر فالكونز">Falcons Roster</h2>
+                    <h2 data-en="Falcons Roster" data-ar="روستر فالكونز">Twisted Minds Competitive Roster</h2>
                     <div class="game">
-                        <h3 data-en="🔫 Counter-Strike 2" data-ar="🔫 Counter-Strike 2">🔫 Counter-Strike 2</h3>
-                        <ul>
-                            <li>NiKo</li>
-                            <li>m0NESY</li>
-                            <li>kyxsan</li>
-                            <li>TeSeS</li>
-                            <li>kyousuke</li>
-                        </ul>
+                        <h3 data-en="🔫 Counter-Strike 2" data-ar="🔫 Counter-Strike 2">🔫 PUBG: Battlegrounds</h3>
+                        <ul><li>BatulinS</li><li>Lu</li><li>Molodoct</li><li>xmpl</li></ul>
                     </div>
                     <div class="game">
                         <h3 data-en="🚗 Rocket League" data-ar="🚗 Rocket League">🚗 Rocket League</h3>
-                        <ul>
-                            <li>dralii</li>
-                            <li>Kiileerrz</li>
-                            <li>Rw9</li>
-                        </ul>
+                        <ul><li>M0nkey M00n</li><li>Nwpo</li><li>trk511</li></ul>
                     </div>
                     <div class="game">
-                        <h3 data-en="🪂 Apex Legends" data-ar="🪂 Apex Legends">🪂 Apex Legends</h3>
-                        <ul>
-                            <li>ImperialHal</li>
-                            <li>Zer0</li>
-                            <li>Wxltzyy</li>
-                        </ul>
+                        <h3 data-en="🪂 Apex Legends" data-ar="🪂 Apex Legends">🪂 Call of Duty: Warzone</h3>
+                        <ul><li>Shifty</li><li>Almond</li><li>zSmit</li></ul>
                     </div>
                     <div class="game">
-                        <h3 data-en="🔫 PUBG (PC)" data-ar="🔫 PUBG (PC)">🔫 PUBG (PC)</h3>
-                        <ul>
-                            <li>TGLTN</li>
-                            <li>hwinn</li>
-                            <li>Shrimzy</li>
-                            <li>M1ME</li>
-                        </ul>
+                        <h3 data-en="🔫 PUBG (PC)" data-ar="🔫 PUBG (PC)">🔫 EA Sports FC</h3>
+                        <ul><li>S7wi</li><li>iAlawe12</li></ul>
                     </div>
                     <div class="game">
-                        <h3 data-en="📱 Mobile Legends" data-ar="📱 Mobile Legends">📱 Mobile Legends</h3>
-                        <ul>
-                            <li>Pheww</li>
-                            <li>FlapTzy</li>
-                            <li>Owgwen</li>
-                            <li>Super Marco</li>
-                            <li>KyleTzy</li>
-                        </ul>
+                        <h3 data-en="📱 Mobile Legends" data-ar="📱 Mobile Legends">📊 Organization Growth</h3>
+                        <ul><li>32+ global championships</li><li>180+ pro players</li><li>Fastest-growing MENA org</li></ul>
                     </div>
-                    <p data-en="Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet." data-ar="ألعاب أخرى: Dota 2، Valorant، Call of Duty، PUBG Mobile، Honor of Kings - الروسترات غير مؤكدة بعد.">Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet.</p>
+                    <div class="game game-note">
+                        <p data-en="Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet." data-ar="ألعاب أخرى: Dota 2، Valorant، Call of Duty، PUBG Mobile، Honor of Kings - الروسترات غير مؤكدة بعد.">Other games: Dota 2, Valorant, Call of Duty, PUBG Mobile, Honor of Kings - Rosters not confirmed yet.</p>
+                    </div>
                 </div>
                 <div id="achievements" class="tab-pane">
-                    <h2 data-en="🏅 Major Achievements" data-ar="🏅 الإنجازات الرئيسية">🏅 Major Achievements</h2>
+                    <h2 data-en="🏅 Major Achievements" data-ar="🏅 الإنجازات الرئيسية">Twisted Achievements</h2>
                     <ul class="achievements-list">
-                        <li data-en="🏆 Winner of EWC 2025 in Multiple Categories" data-ar="🏆 الفائز في EWC 2025 في فئات متعددة">🏆 Winner of EWC 2025 in Multiple Categories</li>
-                        <li data-en="🥇 Top Performer in CS2 World Championship" data-ar="🥇 الأداء الأعلى في بطولة CS2 العالمية">🥇 Top Performer in CS2 World Championship</li>
-                        <li data-en="🚀 Breakthrough in Rocket League Finals" data-ar="🚀 اختراق في نهائيات Rocket League">🚀 Breakthrough in Rocket League Finals</li>
-                        <li data-en="💎 Apex Legends Global Champions" data-ar="💎 أبطال Apex Legends العالميون">💎 Apex Legends Global Champions</li>
-                        <li data-en="🔥 PUBG Masters Series Victories" data-ar="🔥 انتصارات سلسلة PUBG Masters">🔥 PUBG Masters Series Victories</li>
-                        <li data-en="📱 Mobile Legends Regional Dominance" data-ar="📱 هيمنة Mobile Legends الإقليمية">📱 Mobile Legends Regional Dominance</li>
-                        <li data-en="🌟 Rising Star in Esports Scene" data-ar="🌟 نجم صاعد في مشهد الرياضات الإلكترونية">🌟 Rising Star in Esports Scene</li>
+                        <li>🏆 Esports World Cup 2025 – PUBG: Battlegrounds Champion</li>
+                        <li>🏆 Esports World Cup 2025 – Call of Duty: Warzone Champion</li>
+                        <li>🔥 Gamers8 2023 – Best Team in the World, $1.5M prize</li>
+                        <li>🏆 ESL Saudi Challenge 2024 Champion</li>
+                        <li>🏆 ESL Saudi Challenge 2025 Champion</li>
+                        <li>🏅 Esports World Cup Club Championship 2024 – 12th place</li>
+                        <li>🏅 Esports World Cup Club Championship 2025 – 4th place, $2.25M+ earnings</li>
+                        <li>🌍 Global wins across Fortnite, Rocket League, Tekken, Clash Royale</li>
                     </ul>
                 </div>
                 <div id="history" class="tab-pane">
-                    <h2 data-en="📖 Team History" data-ar="📖 تاريخ الفريق">📖 Team History</h2>
-                    <p data-en="Team Falcons, formerly known as Riyadh Falcons, is a powerhouse in the esports industry, representing Saudi Arabia with pride. Founded with a vision to dominate global competitions, the team has rapidly risen through the ranks." data-ar="فريق فالكونز، المعروف سابقًا باسم رياض فالكونز، هو قوة في صناعة الرياضات الإلكترونية، يمثل المملكة العربية السعودية بفخر. تأسس الفريق برؤية للسيطرة على المنافسات العالمية، وقد ارتفع بسرعة في الرتب.">Team Falcons, formerly known as Riyadh Falcons, is a powerhouse in the esports industry, representing Saudi Arabia with pride. Founded with a vision to dominate global competitions, the team has rapidly risen through the ranks.</p>
-                    <p data-en="In 2025, Falcons achieved unprecedented success, securing victories in key tournaments and establishing themselves as a force to be reckoned with. As we approach EWC 2026, the team continues to innovate and build on its legacy." data-ar="في عام 2025، حقق فالكونز نجاحًا غير مسبوق، محققًا انتصارات في بطولات رئيسية ويؤسس نفسه كقوة يجب الحذر منها. مع اقترابنا من EWC 2026، يستمر الفريق في الابتكار وبناء إرثه.">In 2025, Falcons achieved unprecedented success, securing victories in key tournaments and establishing themselves as a force to be reckoned with. As we approach EWC 2026, the team continues to innovate and build on its legacy.</p>
-                    <p data-en="With a roster of elite players and a commitment to excellence, Team Falcons is poised to make history once again." data-ar="مع قائمة من اللاعبين النخبة والالتزام بالتميز، يستعد فريق فالكونز لصنع التاريخ مرة أخرى.">With a roster of elite players and a commitment to excellence, Team Falcons is poised to make history once again.</p>
+                    <h2 data-en="📖 Team History" data-ar="📖 تاريخ الفريق">Twisted History</h2>
+                    <p data-en="Team Falcons, formerly known as Riyadh Falcons, is a powerhouse in the esports industry, representing Saudi Arabia with pride. Founded with a vision to dominate global competitions, the team has rapidly risen through the ranks." data-ar="فريق فالكونز، المعروف سابقًا باسم رياض فالكونز، هو قوة في صناعة الرياضات الإلكترونية، يمثل المملكة العربية السعودية بفخر. تأسس الفريق برؤية للسيطرة على المنافسات العالمية، وقد ارتفع بسرعة في الرتب.">Founded in 2021 in Saudi Arabia by Ibrahim Bin Jibreen (CEO) and Hatem Almukhailed (Co-founder), Twisted Minds began as a PUBG Mobile friends team that entered a local tournament and then adopted the Twisted Minds name.</p>
+                    <p data-en="In 2025, Falcons achieved unprecedented success, securing victories in key tournaments and establishing themselves as a force to be reckoned with. As we approach EWC 2026, the team continues to innovate and build on its legacy." data-ar="في عام 2025، حقق فالكونز نجاحًا غير مسبوق، محققًا انتصارات في بطولات رئيسية ويؤسس نفسه كقوة يجب الحذر منها. مع اقترابنا من EWC 2026، يستمر الفريق في الابتكار وبناء إرثه.">In 2022 the team became an official organization and expanded into Valorant, Overwatch, and Rocket League. In 2023 they exploded onto the world stage with Gamers8 and global recognition.</p>
+                    <p data-en="With a roster of elite players and a commitment to excellence, Team Falcons is poised to make history once again." data-ar="مع قائمة من اللاعبين النخبة والالتزام بالتميز، يستعد فريق فالكونز لصنع التاريخ مرة أخرى.">By 2024 Twisted Minds had grown to 23 teams across 19 games, and in 2025 they expanded into Asia, China, and the Philippines while pushing hard in world championships.</p>
                 </div>
             </div>
         </div>
     </div>
-
+    <div id="menuAlt" class="menu">
+        <div class="choice-screen">
+            <button class="close-button" id="closeAltBtn">✕</button>
+            <h1>🌐 Countries</h1>
+            <div class="country-buttons" id="countryMainButtons">
+                <button class="choice-button" type="button" id="spainCountryBtn">Spain</button>
+                <button class="choice-button" type="button" id="ukCountryBtn">UK</button>
+                <button class="choice-button" type="button" id="germanyCountryBtn">Germany</button>
+                <button class="choice-button" type="button" id="ukraineCountryBtn">Ukraine</button>
+                <button class="choice-button" type="button" id="swedenCountryBtn">Sweden</button>
+                <button class="choice-button" type="button">France</button>
+                <button class="choice-button" type="button">Netherlands</button>
+                <button class="choice-button" type="button">Russia</button>
+                <button class="choice-button" type="button">Denmark</button>
+                <button class="choice-button" type="button">Turkey</button>
+            </div>
+            <div id="ukTeamArea" class="country-buttons" style="display: none; margin-top: 12px;">
+                <button class="choice-button" type="button" id="ukBackBtn">◀ Back</button>
+                <button class="choice-button" type="button" id="fnaticTeamBtn"><img class="team-logo" src="logos/fnatic.png" alt="Fnatic logo">FNATIC</button>
+            </div>
+            <div id="spainTeamArea" class="country-buttons" style="display: none; margin-top: 12px;">
+                <button class="choice-button" type="button" id="spainBackBtn">◀ Back</button>
+                <button class="choice-button" type="button" id="g2TeamBtn"><img class="team-logo" src="logos/g2.png" alt="G2 Esports logo">G2 Esports</button>
+                <button class="choice-button" type="button" id="hereticsTeamBtn"><img class="team-logo" src="logos/heretics.png" alt="Team Heretics logo">Team Heretics</button>
+            </div>
+            <div id="germanyTeamArea" class="country-buttons" style="display: none; margin-top: 12px;">
+                <button class="choice-button" type="button" id="germanyBackBtn">◀ Back</button>
+                <button class="choice-button" type="button" id="mouzTeamBtn"><img class="team-logo" src="logos/mouz.png" alt="MOUZ logo">MOUZ</button>
+            </div>
+            <div id="ukraineTeamArea" class="country-buttons" style="display: none; margin-top: 12px;">
+                <button class="choice-button" type="button" id="ukraineBackBtn">◀ Back</button>
+                <button class="choice-button" type="button" id="naviTeamBtn"><img class="team-logo" src="logos/navi.png" alt="Natus Vincere logo">Natus Vincere</button>
+            </div>
+            <div id="swedenTeamArea" class="country-buttons" style="display: none; margin-top: 12px;">
+                <button class="choice-button" type="button" id="swedenBackBtn">◀ Back</button>
+                <button class="choice-button" type="button" id="nipTeamBtn"><img class="team-logo" src="logos/nip.png" alt="NiP logo">Ninjas in Pyjamas</button>
+            </div>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
     <script>
@@ -383,10 +502,10 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        const lat = 23.7691 * Math.PI / 180; // Cairo, Africa
-        const lon = 135.2799 * Math.PI / 180;
+        const lat = 20.9435 * Math.PI / 180;
+        const lon = 134.4804 * Math.PI / 180;
 
-        const earthGeometry = new THREE.SphereGeometry(1, 1024, 1024);
+        const earthGeometry = new THREE.SphereGeometry(1, 512, 512);
         const earthMaterial = new THREE.MeshPhongMaterial({
             map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg'),
             bumpMap: new THREE.TextureLoader().load('https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg'),
@@ -397,8 +516,9 @@
         scene.add(earth);
 
         const galaxyGeometry = new THREE.SphereGeometry(2048, 64, 64);
+        const galaxyTexture = new THREE.TextureLoader().load('file:///C:/Users/afm74/Downloads/image.jpg');
         const galaxyMaterial = new THREE.MeshBasicMaterial({
-            color: 0x000011,
+            map: galaxyTexture,
             side: THREE.BackSide
         });
         const galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
@@ -423,8 +543,9 @@
         }
         twinkle();
 
-       const markerGeometry = new THREE.SphereGeometry(0.03, 32, 32);
-        const ringGeometry = new THREE.TorusGeometry(0.055, 0.005, 16, 100);
+    const markerGeometry = new THREE.SphereGeometry(0.025, 32, 32);
+    const markerHitGeometry = new THREE.SphereGeometry(0.06, 16, 16);
+        const ringGeometry = new THREE.TorusGeometry(0.04, 0.005, 16, 100);
         const radius = 1.05;
 
         function createMarker(latValue, lonValue, colorValue) {
@@ -437,6 +558,16 @@
             );
             earth.add(marker);
 
+            // Invisible hit-area so clicks don't need pixel-perfect precision on tiny markers.
+            const markerHitMaterial = new THREE.MeshBasicMaterial({
+                transparent: true,
+                opacity: 0,
+                depthWrite: false
+            });
+            const markerHitArea = new THREE.Mesh(markerHitGeometry, markerHitMaterial);
+            markerHitArea.position.copy(marker.position);
+            earth.add(markerHitArea);
+
             const ringMaterial = new THREE.MeshBasicMaterial({ color: colorValue });
             const ring = new THREE.Mesh(ringGeometry, ringMaterial);
             ring.position.copy(marker.position);
@@ -445,44 +576,56 @@
             ring.rotateY(0.4);
             earth.add(ring);
 
-            return { marker, ring, lat: latValue, lon: lonValue };
+            return { marker, markerHitArea, ring, lat: latValue, lon: lonValue };
         }
 
-        const { marker, ring: markerRing, lat: markerLat, lon: markerLon } = createMarker(lat, lon, 0x00ff00);
+        const { marker, markerHitArea: markerHitArea, ring: markerRing, lat: markerLat, lon: markerLon } = createMarker(lat, lon, 0x00ff00);
 
         // Riyadh, Saudi Arabia marker
         const riyadhLat = 24.7136 * Math.PI / 180;
         const riyadhLon = 46.6753 * Math.PI / 180;
-        const { marker: riyadhMarker, ring: riyadhRing, lat: riyadhMarkerLat, lon: riyadhMarkerLon } = createMarker(riyadhLat, riyadhLon, 0x00ff00);
+        const { marker: riyadhMarker, markerHitArea: riyadhHitArea, ring: riyadhRing, lat: riyadhMarkerLat, lon: riyadhMarkerLon } = createMarker(riyadhLat, riyadhLon, 0x00ff00);
 
-        // New marker at 50.3472, 123.5935
-        const newLat = 50.3472 * Math.PI / 180;
-        const newLon = 123.5935 * Math.PI / 180;
-        const { marker: newMarker, ring: newRing, lat: newMarkerLat, lon: newMarkerLon } = createMarker(newLat, newLon, 0x00ff00);
+        // New marker at 48.8072, 123.2206
+        const newLat = 48.8072 * Math.PI / 180;
+        const newLon = 123.2206 * Math.PI / 180;
+        const { marker: newMarker, markerHitArea: newHitArea, ring: newRing, lat: newMarkerLat, lon: newMarkerLon } = createMarker(newLat, newLon, 0x00ff00);
 
         // New marker at 40.8605, 170.3134
         const blueLat = 40.8605 * Math.PI / 180;
         const blueLon = 170.3134 * Math.PI / 180;
-        const { marker: blueMarker, ring: blueRing, lat: blueMarkerLat, lon: blueMarkerLon } = createMarker(blueLat, blueLon, 0x00ff00);
+        const { marker: blueMarker, markerHitArea: blueHitArea, ring: blueRing, lat: blueMarkerLat, lon: blueMarkerLon } = createMarker(blueLat, blueLon, 0x00ff00);
 
         // New marker at -16.5356, 33.4131
         const darkYellowLat = -16.5356 * Math.PI / 180;
         const darkYellowLon = 33.4131 * Math.PI / 180;
-        const { marker: darkYellowMarker, ring: darkYellowRing, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon } = createMarker(darkYellowLat, darkYellowLon, 0x00ff00);
+        const { marker: darkYellowMarker, markerHitArea: darkYellowHitArea, ring: darkYellowRing, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon } = createMarker(darkYellowLat, darkYellowLon, 0x00ff00);
 
-        // New marker at 39.0616, 347.1612
-        const extraLat = 39.0616 * Math.PI / 180;
-        const extraLon = 347.1612 * Math.PI / 180;
-        const { marker: extraMarker, ring: extraRing, lat: extraMarkerLat, lon: extraMarkerLon } = createMarker(extraLat, extraLon, 0x00ff00);
+        // Spain marker
+        const spainLat = 40.4168 * Math.PI / 180;
+        const spainLon = -3.7038 * Math.PI / 180;
+        const { marker: extraMarker, markerHitArea: extraHitArea, ring: extraRing, lat: extraMarkerLat, lon: extraMarkerLon } = createMarker(spainLat, spainLon, 0x00ff00);
 
         // Array of all clickable objects with their data
         const clickableObjects = [
-            { obj: marker, lat: markerLat, lon: markerLon },
-            { obj: riyadhMarker, lat: riyadhMarkerLat, lon: riyadhMarkerLon },
-            { obj: newMarker, lat: newMarkerLat, lon: newMarkerLon },
-            { obj: blueMarker, lat: blueMarkerLat, lon: blueMarkerLon },
-            { obj: darkYellowMarker, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon },
-            { obj: extraMarker, lat: extraMarkerLat, lon: extraMarkerLon }
+            { obj: marker, lat: markerLat, lon: markerLon, opensHub: true, opensAltHub: false },
+            { obj: markerHitArea, lat: markerLat, lon: markerLon, opensHub: true, opensAltHub: false },
+            { obj: markerRing, lat: markerLat, lon: markerLon, opensHub: true, opensAltHub: false },
+            { obj: riyadhMarker, lat: riyadhMarkerLat, lon: riyadhMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: riyadhHitArea, lat: riyadhMarkerLat, lon: riyadhMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: riyadhRing, lat: riyadhMarkerLat, lon: riyadhMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: newMarker, lat: newMarkerLat, lon: newMarkerLon, opensHub: false, opensAltHub: true },
+            { obj: newHitArea, lat: newMarkerLat, lon: newMarkerLon, opensHub: false, opensAltHub: true },
+            { obj: newRing, lat: newMarkerLat, lon: newMarkerLon, opensHub: false, opensAltHub: true },
+            { obj: blueMarker, lat: blueMarkerLat, lon: blueMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: blueHitArea, lat: blueMarkerLat, lon: blueMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: blueRing, lat: blueMarkerLat, lon: blueMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: darkYellowMarker, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: darkYellowHitArea, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: darkYellowRing, lat: darkYellowMarkerLat, lon: darkYellowMarkerLon, opensHub: false, opensAltHub: false },
+            { obj: extraMarker, lat: extraMarkerLat, lon: extraMarkerLon, opensHub: false, opensAltHub: false, isSpain: true },
+            { obj: extraHitArea, lat: extraMarkerLat, lon: extraMarkerLon, opensHub: false, opensAltHub: false, isSpain: true },
+            { obj: extraRing, lat: extraMarkerLat, lon: extraMarkerLon, opensHub: false, opensAltHub: false, isSpain: true }
         ];
 
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -491,77 +634,447 @@
         directionalLight.position.set(5, 5, 5);
         scene.add(directionalLight);
 
-        camera.position.z = 2.5;
+        camera.position.z = 1.8;
 
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
+        controls.dampingFactor = 0.05;
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         const menu = document.getElementById('menu');
+        const menuAlt = document.getElementById('menuAlt');
         const coordsDisplay = document.getElementById('coordsDisplay');
-        const choiceScreen = document.querySelector('.choice-screen');
-        const mainMenu = document.querySelector('.main-menu');
 
         menu.addEventListener('click', (e) => e.stopPropagation());
-        window.addEventListener('click', (event) => {
-            if (menu.contains(event.target)) return;
-
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            const earthIntersects = raycaster.intersectObject(earth, false);
-
-            if (earthIntersects.length > 0) {
-                const point = earthIntersects[0].point.clone();
-                earth.worldToLocal(point);
-                const latClicked = Math.asin(point.y / 1);
-                let lonClicked = Math.atan2(point.x, point.z);
-                let latDeg = THREE.Math.radToDeg(latClicked);
-                let lonDeg = THREE.Math.radToDeg(lonClicked);
-                if (lonDeg < 0) lonDeg += 360;
-                coordsDisplay.textContent = `Latitude: ${latDeg.toFixed(4)}°, Longitude: ${lonDeg.toFixed(4)}°`;
-            } else {
-                coordsDisplay.textContent = 'Click on the globe to show coordinates';
-            }
-
-            let clickedData = null;
-            for (const item of clickableObjects) {
-                const intersects = raycaster.intersectObject(item.obj, true);
-                if (intersects.length > 0) {
-                    clickedData = item;
-                    break;
-                }
-            }
-
-            if (clickedData) {
-                menu.style.display = 'block';
-                choiceScreen.style.display = 'flex';
-                mainMenu.style.display = 'none';
-            } else {
-                if (!menu.contains(event.target)) {
-                    menu.style.display = 'none';
-                }
+        menuAlt.addEventListener('click', (e) => {
+            // Clicking the backdrop closes the alternate hub.
+            if (e.target === menuAlt) {
+                menuAlt.style.display = 'none';
             }
         });
+window.addEventListener('click', (event) => {
+    if (menu.contains(event.target) || menuAlt.contains(event.target)) return;
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const earthIntersects = raycaster.intersectObject(earth, false);
+
+    if (earthIntersects.length > 0) {
+        const point = earthIntersects[0].point.clone();
+        earth.worldToLocal(point);
+        const latClicked = Math.asin(point.y / 1);
+        let lonClicked = Math.atan2(point.x, point.z);
+        let latDeg = THREE.Math.radToDeg(latClicked);
+        let lonDeg = THREE.Math.radToDeg(lonClicked);
+        if (lonDeg < 0) lonDeg += 360;
+        coordsDisplay.textContent = `Latitude: ${latDeg.toFixed(4)}°, Longitude: ${lonDeg.toFixed(4)}°`;
+    } else {
+        coordsDisplay.textContent = 'Click on the globe to show coordinates';
+    }
+
+    let clickedData = null;
+    for (const item of clickableObjects) {
+        const intersects = raycaster.intersectObject(item.obj, true);
+        if (intersects.length > 0) {
+            clickedData = item;
+            break;
+        }
+    }
+
+    if (clickedData && clickedData.opensAltHub) {
+        menuAlt.style.display = 'block';
+        menu.style.display = 'none';
+        document.getElementById('ukTeamArea').style.display = 'none';
+        cameFromCountries = false;
+    } else if (clickedData && clickedData.opensHub) {
+        menu.style.display = 'block';
+        menuAlt.style.display = 'none';
+        choiceScreen.style.display = 'flex';
+        mainMenu.style.display = 'none';
+        // Hide Spain buttons
+        document.getElementById('g2Btn').style.display = 'none';
+        document.getElementById('hereticsBtn').style.display = 'none';
+        // Show default buttons
+        document.getElementById('powrFalconsBtn').style.display = 'block';
+        document.getElementById('twistedMindsBtn').style.display = 'block';
+        document.getElementById('falconsBtn').style.display = 'block';
+        cameFromCountries = false;
+    } else if (clickedData && clickedData.isSpain) {
+        menu.style.display = 'block';
+        menuAlt.style.display = 'none';
+        choiceScreen.style.display = 'flex';
+        mainMenu.style.display = 'none';
+        // Show Spain buttons
+        document.getElementById('g2Btn').style.display = 'block';
+        document.getElementById('hereticsBtn').style.display = 'block';
+        // Hide default buttons
+        document.getElementById('powrFalconsBtn').style.display = 'none';
+        document.getElementById('twistedMindsBtn').style.display = 'none';
+        document.getElementById('falconsBtn').style.display = 'none';
+        cameFromCountries = false;
+    } else {
+        menu.style.display = 'none';
+        menuAlt.style.display = 'none';
+    }
+});
 
         // Choice functionality
+        const choiceScreen = document.querySelector('.choice-screen');
+        const mainMenu = document.querySelector('.menu-panel');
         const powrFalconsBtn = document.getElementById('powrFalconsBtn');
         const twistedMindsBtn = document.getElementById('twistedMindsBtn');
         const falconsBtn = document.getElementById('falconsBtn');
+        const g2Btn = document.getElementById('g2Btn');
+        const hereticsBtn = document.getElementById('hereticsBtn');
         const closeChoiceBtn = document.getElementById('closeChoiceBtn');
+        const ukCountryBtn = document.getElementById('ukCountryBtn');
+        const countryMainButtons = document.getElementById('countryMainButtons');
+        const ukTeamArea = document.getElementById('ukTeamArea');
+        const ukBackBtn = document.getElementById('ukBackBtn');
+        const fnaticTeamBtn = document.getElementById('fnaticTeamBtn');
+        const spainCountryBtn = document.getElementById('spainCountryBtn');
+        const spainTeamArea = document.getElementById('spainTeamArea');
+        const spainBackBtn = document.getElementById('spainBackBtn');
+        const g2TeamBtn = document.getElementById('g2TeamBtn');
+        const hereticsTeamBtn = document.getElementById('hereticsTeamBtn');
+        const swedenCountryBtn = document.getElementById('swedenCountryBtn');
+        const swedenTeamArea = document.getElementById('swedenTeamArea');
+        const swedenBackBtn = document.getElementById('swedenBackBtn');
+        const nipTeamBtn = document.getElementById('nipTeamBtn');
+        const germanyCountryBtn = document.getElementById('germanyCountryBtn');
+        const germanyTeamArea = document.getElementById('germanyTeamArea');
+        const germanyBackBtn = document.getElementById('germanyBackBtn');
+        const mouzTeamBtn = document.getElementById('mouzTeamBtn');
+        const ukraineCountryBtn = document.getElementById('ukraineCountryBtn');
+        const ukraineTeamArea = document.getElementById('ukraineTeamArea');
+        const ukraineBackBtn = document.getElementById('ukraineBackBtn');
+        const naviTeamBtn = document.getElementById('naviTeamBtn');
+
+        let cameFromCountries = false;
 
         closeChoiceBtn.addEventListener('click', () => {
             menu.style.display = 'none';
+        });
+
+        document.getElementById('closeAltBtn').addEventListener('click', () => {
+            menuAlt.style.display = 'none';
+            ukTeamArea.style.display = 'none';
+            spainTeamArea.style.display = 'none';
+            germanyTeamArea.style.display = 'none';
+            ukraineTeamArea.style.display = 'none';
+            swedenTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        function openFnaticHub() {
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+
+            // Populate the hub with Fnatic content.
+            document.querySelector('.menu-panel h1').textContent = '🟧 Fnatic Hub';
+            document.querySelector('#roster h2').textContent = 'Fnatic Competitive Roster';
+
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🎯 Valorant';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>Boaster</li><li>Derke</li><li>Leo</li><li>Chronicle</li><li>Alfajer</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>KRIMZ</li><li>matys</li><li>afro</li><li>bodyy</li><li>blameF</li>';
+            document.querySelectorAll('#roster .game h3')[2].textContent = '⚔️ League of Legends';
+            document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>Oscarinin</li><li>Razork</li><li>Humanoid</li><li>Nightshare</li><li>Noah</li>';
+            document.querySelectorAll('#roster .game h3')[3].textContent = '🛡️ Rainbow Six Siege';
+            document.querySelectorAll('#roster .game ul')[3].innerHTML = '<li>Competitive Lineup</li><li>EU Stage Focus</li>';
+            document.querySelectorAll('#roster .game h3')[4].textContent = '🌍 Global Brand';
+            document.querySelectorAll('#roster .game ul')[4].innerHTML = '<li>Founded in 2004</li><li>One of Europe\'s most iconic esports brands</li><li>Multi-title international presence</li>';
+            document.querySelectorAll('#roster .game')[3].style.display = 'block';
+            document.querySelectorAll('#roster .game')[4].style.display = 'block';
+
+            document.querySelector('#achievements h2').textContent = 'Fnatic Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 Multiple international titles across FPS and MOBA esports</li>
+                <li>🔥 Valorant and CS lineups consistently at top-tier events</li>
+                <li>🌍 Long-running global fanbase and historic EU legacy</li>
+                <li>🎖️ Decade-spanning results in major circuits</li>
+            `;
+
+            document.querySelector('#history h2').textContent = 'Fnatic History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'Fnatic is a UK-based esports organization founded in 2004 and known as one of the most established names in competitive gaming.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Over the years, Fnatic built elite teams across titles like League of Legends, Counter-Strike, and Valorant, earning a strong reputation in Europe and globally.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Today Fnatic remains a flagship esports brand with high-level competition, strong content presence, and a deeply rooted fan community.';
+        }
+
+        function openNipHub() {
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+
+            document.querySelector('.menu-panel h1').textContent = '🇸🇪 Ninjas in Pyjamas Hub';
+            document.querySelector('#roster h2').textContent = 'NiP Competitive Roster';
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>REZ</li><li>HooXi</li><li>allu</li><li>Plopski</li><li>twist</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 Valorant';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>Dycha</li><li>Weber</li><li>EMUHLE</li><li>Syed</li><li>L1nk</li>';
+            document.querySelectorAll('#roster .game h3')[2].textContent = '🎮 Rainbow Six Siege';
+            document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>Shaiiko</li><li>Maho</li><li>p4</li><li>Rask</li><li>Steel</li>';
+            document.querySelectorAll('#roster .game h3')[3].textContent = '🌍 Brand & Content';
+            document.querySelectorAll('#roster .game ul')[3].innerHTML = '<li>Historic CS legacy</li><li>Global esports content</li>';
+            document.querySelectorAll('#roster .game h3')[4].textContent = '📊 Organization Reach';
+            document.querySelectorAll('#roster .game ul')[4].innerHTML = '<li>Founded 2000</li><li>One of Sweden\'s most famous esports brands</li>';
+            document.querySelectorAll('#roster .game')[3].style.display = 'block';
+            document.querySelectorAll('#roster .game')[4].style.display = 'block';
+
+            document.querySelector('#achievements h2').textContent = 'NiP Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 ESL One Cologne 2024 finalist</li>
+                <li>🥇 Blast Premier 2024 winner</li>
+                <li>🏅 Multiple CS2 Major top finishes</li>
+            `;
+            document.querySelector('#history h2').textContent = 'NiP History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'Ninjas in Pyjamas is a legendary Swedish esports organization founded in 2000.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'NiP is best known for its world-class Counter-Strike teams and long history in competitive gaming.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'The club continues to compete in international CS2 events while growing its Valorant and content presence.';
+        }
+
+        ukCountryBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Keep user in countries hub and switch to UK team options.
+            menuAlt.style.display = 'block';
+            menu.style.display = 'none';
+            countryMainButtons.style.display = 'none';
+            ukTeamArea.style.display = 'flex';
+        });
+
+        ukBackBtn.addEventListener('click', () => {
+            ukTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        fnaticTeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            ukTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            openFnaticHub();
+        });
+
+        spainCountryBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Keep user in countries hub and switch to Spain team options.
+            menuAlt.style.display = 'block';
+            menu.style.display = 'none';
+            countryMainButtons.style.display = 'none';
+            spainTeamArea.style.display = 'flex';
+        });
+
+        spainBackBtn.addEventListener('click', () => {
+            spainTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        ukraineCountryBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Keep user in countries hub and switch to Ukraine team options.
+            menuAlt.style.display = 'block';
+            menu.style.display = 'none';
+            countryMainButtons.style.display = 'none';
+            ukraineTeamArea.style.display = 'flex';
+        });
+
+        ukraineBackBtn.addEventListener('click', () => {
+            ukraineTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        swedenCountryBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            menuAlt.style.display = 'block';
+            menu.style.display = 'none';
+            countryMainButtons.style.display = 'none';
+            swedenTeamArea.style.display = 'flex';
+        });
+
+        swedenBackBtn.addEventListener('click', () => {
+            swedenTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        nipTeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            swedenTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            openNipHub();
+        });
+
+        g2TeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            spainTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to G2 Esports Hub
+            document.querySelector('.menu-panel h1').textContent = '🐺 G2 Esports Hub';
+            document.querySelector('#roster h2').textContent = 'G2 Esports Roster';
+            // Update roster for G2
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🎯 Valorant';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>m1xwell</li><li>valyn</li><li>hoody</li><li>leaf</li><li>Boaster</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 League of Legends';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>BrokenBlade</li><li>Yike</li><li>Flakked</li><li>Caps</li><li>Hans Sama</li>';
+            document.querySelectorAll('#roster .game h3')[2].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>m0NESY</li><li>NiKo</li><li>huNter-</li><li>malbsMd</li><li>Snax</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'G2 Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 Valorant Champions 2023</li>
+                <li>🥇 LoL World Championship 2019</li>
+                <li>🏅 CS2 Major winners</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'G2 History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'G2 Esports is a European esports organization founded in 2015.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Known for dominating in multiple games including LoL, Valorant, and CS2.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Based in Spain, G2 has won numerous international titles.';
+        });
+
+        hereticsTeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            spainTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to Team Heretics Hub
+            document.querySelector('.menu-panel h1').textContent = '⚔️ Team Heretics Hub';
+            document.querySelector('#roster h2').textContent = 'Team Heretics Roster';
+            // Update roster for Team Heretics
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🎯 Valorant';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>Mixwell</li><li>keloqz</li><li>AvovA</li><li>stk</li><li>Wo0t</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 League of Legends';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>Flakked</li><li>Supa</li><li>Alvaro</li><li>Marky</li><li>Stend</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[2].style.display = 'none';
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'Heretics Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 Valorant Champions 2024</li>
+                <li>🥇 LoL European Championship</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'Heretics History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'Team Heretics is a Spanish esports organization founded in 2021.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Competes in Valorant, LoL, and other games.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Known for strong performances in European leagues.';
+        });
+
+        germanyCountryBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Keep user in countries hub and switch to Germany team options.
+            menuAlt.style.display = 'block';
+            menu.style.display = 'none';
+            countryMainButtons.style.display = 'none';
+            germanyTeamArea.style.display = 'flex';
+        });
+
+        germanyBackBtn.addEventListener('click', () => {
+            germanyTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+        });
+
+        mouzTeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            germanyTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to MOUZ Hub
+            document.querySelector('.menu-panel h1').textContent = '🐭 MOUZ Hub';
+            document.querySelector('#roster h2').textContent = 'MOUZ Roster';
+            // Update roster for MOUZ
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>xertioN</li><li>acoR</li><li>torzsi</li><li>siuhy</li><li>JDC</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 League of Legends';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>Comp</li><li>Special</li><li>Advienne</li><li>Lucky</li><li>Irrelevant</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[2].style.display = 'none';
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'MOUZ Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 ESL Pro League Season 17</li>
+                <li>🥇 BLAST Premier Fall Final 2023</li>
+                <li>🏅 PGL Major Stockholm 2021</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'MOUZ History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'MOUZ, formerly known as mousesports, is a German esports organization founded in 2002.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Renowned for its Counter-Strike teams and has expanded into LoL and other games.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'One of the oldest and most successful esports organizations in Europe.';
+        });
+
+        naviTeamBtn.addEventListener('click', () => {
+            cameFromCountries = true;
+            ukraineTeamArea.style.display = 'none';
+            countryMainButtons.style.display = 'flex';
+            menuAlt.style.display = 'none';
+            menu.style.display = 'block';
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to Natus Vincere Hub
+            document.querySelector('.menu-panel h1').textContent = '🐷 Natus Vincere Hub';
+            document.querySelector('#roster h2').textContent = 'Natus Vincere Roster';
+            // Update roster for Na'Vi
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>s1mple</li><li>electronic</li><li>Perfecto</li><li>b1t</li><li>jL</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 Dota 2';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>RAMZES666</li><li>Crystallize</li><li>Mira</li><li>Collapse</li><li>Immersion</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[2].style.display = 'none';
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'Na\'Vi Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 The International 2011</li>
+                <li>🥇 PGL Major Stockholm 2021</li>
+                <li>🏅 StarLadder Berlin Major 2019</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'Na\'Vi History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'Natus Vincere, commonly known as Na\'Vi, is a Ukrainian esports organization founded in 2009.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'One of the most successful teams in Counter-Strike and Dota 2 history.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Known for their iconic yellow and blue colors representing Ukraine.';
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                menuAlt.style.display = 'none';
+                ukTeamArea.style.display = 'none';
+                spainTeamArea.style.display = 'none';
+                germanyTeamArea.style.display = 'none';
+                ukraineTeamArea.style.display = 'none';
+                swedenTeamArea.style.display = 'none';
+                countryMainButtons.style.display = 'flex';
+            }
         });
 
         powrFalconsBtn.addEventListener('click', () => {
             choiceScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             // Change title to POWR Hub
-            document.querySelector('.main-menu h1').textContent = '⚡ POWR Hub';
+            document.querySelector('.menu-panel h1').textContent = '⚡ POWR Hub';
             document.querySelector('#roster h2').textContent = 'POWR Competitive Roster';
             // Update game titles and rosters
             document.querySelectorAll('#roster .game h3')[0].textContent = '📱 PUBG Mobile';
@@ -594,7 +1107,7 @@
             choiceScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             // Change title to Twisted Minds Hub
-            document.querySelector('.main-menu h1').textContent = '🌀 Twisted Minds Hub';
+            document.querySelector('.menu-panel h1').textContent = '🌀 Twisted Minds Hub';
             document.querySelector('#roster h2').textContent = 'Twisted Minds Competitive Roster';
             // Update game titles
             document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 PUBG: Battlegrounds';
@@ -633,7 +1146,7 @@
             choiceScreen.style.display = 'none';
             mainMenu.style.display = 'flex';
             // Change title to Falcons Hub
-            document.querySelector('.main-menu h1').textContent = '🦅 Falcons Hub';
+            document.querySelector('.menu-panel h1').textContent = '🦅 Falcons Hub';
             // Reset roster
             document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
             document.querySelectorAll('#roster .game h3')[1].textContent = '🚗 Rocket League';
@@ -654,6 +1167,64 @@
             document.querySelectorAll('#roster .game')[4].style.display = 'block';
         });
 
+        g2Btn.addEventListener('click', () => {
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to G2 Esports Hub
+            document.querySelector('.menu-panel h1').textContent = '🐺 G2 Esports Hub';
+            document.querySelector('#roster h2').textContent = 'G2 Esports Roster';
+            // Update roster for G2
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🎯 Valorant';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>m1xwell</li><li>valyn</li><li>hoody</li><li>leaf</li><li>Boaster</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 League of Legends';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>BrokenBlade</li><li>Yike</li><li>Flakked</li><li>Caps</li><li>Hans Sama</li>';
+            document.querySelectorAll('#roster .game h3')[2].textContent = '🔫 Counter-Strike 2';
+            document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>m0NESY</li><li>NiKo</li><li>huNter-</li><li>malbsMd</li><li>Snax</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'G2 Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 Valorant Champions 2023</li>
+                <li>🥇 LoL World Championship 2019</li>
+                <li>🏅 CS2 Major winners</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'G2 History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'G2 Esports is a European esports organization founded in 2015.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Known for dominating in multiple games including LoL, Valorant, and CS2.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Based in Spain, G2 has won numerous international titles.';
+        });
+
+        hereticsBtn.addEventListener('click', () => {
+            choiceScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            // Change title to Team Heretics Hub
+            document.querySelector('.menu-panel h1').textContent = '⚔️ Team Heretics Hub';
+            document.querySelector('#roster h2').textContent = 'Team Heretics Roster';
+            // Update roster for Team Heretics
+            document.querySelectorAll('#roster .game h3')[0].textContent = '🎯 Valorant';
+            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>Mixwell</li><li>keloqz</li><li>AvovA</li><li>stk</li><li>Wo0t</li>';
+            document.querySelectorAll('#roster .game h3')[1].textContent = '🎮 League of Legends';
+            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>Flakked</li><li>Supa</li><li>Alvaro</li><li>Marky</li><li>Stend</li>';
+            // Hide other games
+            document.querySelectorAll('#roster .game')[2].style.display = 'none';
+            document.querySelectorAll('#roster .game')[3].style.display = 'none';
+            document.querySelectorAll('#roster .game')[4].style.display = 'none';
+            // Update achievements
+            document.querySelector('#achievements h2').textContent = 'Heretics Achievements';
+            document.querySelector('#achievements .achievements-list').innerHTML = `
+                <li>🏆 Valorant Champions 2024</li>
+                <li>🥇 LoL European Championship</li>
+            `;
+            // Update history
+            document.querySelector('#history h2').textContent = 'Heretics History';
+            document.querySelector('#history p:nth-of-type(1)').textContent = 'Team Heretics is a Spanish esports organization founded in 2021.';
+            document.querySelector('#history p:nth-of-type(2)').textContent = 'Competes in Valorant, LoL, and other games.';
+            document.querySelector('#history p:nth-of-type(3)').textContent = 'Known for strong performances in European leagues.';
+        });
+
         // Tab functionality
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabPanes = document.querySelectorAll('.tab-pane');
@@ -670,36 +1241,32 @@
 
         // Close button functionality
         const closeButton = document.getElementById('closeButton');
-        const closeHubButton = document.getElementById('closeHubButton');
-        function closeHub() {
-            mainMenu.style.display = 'none';
-            choiceScreen.style.display = 'flex';
-            // Reset to Falcons
-            document.querySelector('.main-menu h1').textContent = '🦅 Falcons Hub';
-            document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
-            document.querySelectorAll('#roster .game h3')[1].textContent = '🚗 Rocket League';
-            document.querySelectorAll('#roster .game h3')[2].textContent = '🪂 Apex Legends';
-            document.querySelectorAll('#roster .game h3')[3].textContent = '🔫 PUBG (PC)';
-            document.querySelectorAll('#roster .game h3')[4].textContent = '📱 Mobile Legends';
-            document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>NiKo</li><li>m0NESY</li><li>kyxsan</li><li>TeSeS</li><li>kyousuke</li>';
-            document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>dralii</li><li>Kiileerrz</li><li>Rw9</li>';
-            document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>ImperialHal</li><li>Zer0</li><li>Wxltzyy</li>';
-            document.querySelectorAll('#roster .game ul')[3].innerHTML = '<li>TGLTN</li><li>hwinn</li><li>Shrimzy</li><li>M1ME</li>';
-            document.querySelectorAll('#roster .game ul')[4].innerHTML = '<li>Pheww</li><li>FlapTzy</li><li>Owgwen</li><li>Super Marco</li><li>KyleTzy</li>';
-            document.querySelector('#achievements h2').textContent = '🏅 Major Achievements';
-            document.querySelector('#history h2').textContent = '📖 Team History';
-            document.querySelectorAll('#roster .game')[3].style.display = 'block';
-            document.querySelectorAll('#roster .game')[4].style.display = 'block';
-        }
-        closeButton.addEventListener('click', closeHub);
-        closeHubButton.addEventListener('click', closeHub);
-        document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    menu.style.display = 'none';
-    mainMenu.style.display = 'none';
-    choiceScreen.style.display = 'flex';
-  }
-});
+        closeButton.addEventListener('click', () => {
+            if (cameFromCountries) {
+                menu.style.display = 'none';
+                menuAlt.style.display = 'block';
+                cameFromCountries = false;
+            } else {
+                mainMenu.style.display = 'none';
+                choiceScreen.style.display = 'flex';
+                // Reset to Falcons
+                document.querySelector('.menu-panel h1').textContent = '🦅 Falcons Hub';
+                document.querySelectorAll('#roster .game h3')[0].textContent = '🔫 Counter-Strike 2';
+                document.querySelectorAll('#roster .game h3')[1].textContent = '🚗 Rocket League';
+                document.querySelectorAll('#roster .game h3')[2].textContent = '🪂 Apex Legends';
+                document.querySelectorAll('#roster .game h3')[3].textContent = '🔫 PUBG (PC)';
+                document.querySelectorAll('#roster .game h3')[4].textContent = '📱 Mobile Legends';
+                document.querySelectorAll('#roster .game ul')[0].innerHTML = '<li>NiKo</li><li>m0NESY</li><li>kyxsan</li><li>TeSeS</li><li>kyousuke</li>';
+                document.querySelectorAll('#roster .game ul')[1].innerHTML = '<li>dralii</li><li>Kiileerrz</li><li>Rw9</li>';
+                document.querySelectorAll('#roster .game ul')[2].innerHTML = '<li>ImperialHal</li><li>Zer0</li><li>Wxltzyy</li>';
+                document.querySelectorAll('#roster .game ul')[3].innerHTML = '<li>TGLTN</li><li>hwinn</li><li>Shrimzy</li><li>M1ME</li>';
+                document.querySelectorAll('#roster .game ul')[4].innerHTML = '<li>Pheww</li><li>FlapTzy</li><li>Owgwen</li><li>Super Marco</li><li>KyleTzy</li>';
+                document.querySelector('#achievements h2').textContent = '🏅 Major Achievements';
+                document.querySelector('#history h2').textContent = '📖 Team History';
+                document.querySelectorAll('#roster .game')[3].style.display = 'block';
+                document.querySelectorAll('#roster .game')[4].style.display = 'block';
+            }
+        });
 
         function animate() {
             requestAnimationFrame(animate);
@@ -713,6 +1280,7 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
     </script>
 </body>
 </html>
