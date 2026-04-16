@@ -4,7 +4,7 @@ Z<html lang="en">
     <meta charset="UTF-8" />ON
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <title>esports</title>
+    <title>3D Globe with 360 Photo</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -48,15 +48,19 @@ Z<html lang="en">
             50% { opacity: 0.7; text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff; }
         }
         #popupPhoto {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 420px;
-            height: 280px;
-            border: 2px solid #fff;
-            display: none;
-            z-index: 20;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background: #000;
+            display: none;
+            z-index: 1000;
+        }
+        #popupPhoto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .menu {
             position: fixed;
@@ -383,7 +387,7 @@ Z<html lang="en">
 <body>
     <div class="signature">.</div>
     <div id="coordsDisplay" class="coords-display">Click on the globe to show coordinates</div>
-    <div id="popupPhoto"></div>
+    <div id="popupPhoto"><img id="popupImg" src="" alt="Popup Image"></div>
     <div id="menu" class="menu">
         <div class="choice-screen">
             <button class="close-button" id="closeChoiceBtn">✕</button>
@@ -1070,11 +1074,9 @@ window.addEventListener('click', (event) => {
                 countryMainButtons.style.display = 'flex';
                 document.getElementById('popupPhoto').style.display = 'none';
             } else if (event.altKey && event.key === 'm') {
-                const popup = document.getElementById('popupPhoto');
-                popup.style.backgroundImage = 'url("file:///C:/Users/afm74/Downloads/image.jpg")';
-                popup.style.backgroundSize = 'cover';
-                popup.style.backgroundPosition = 'center';
-                popup.style.display = 'block';
+                const popupImg = document.getElementById('popupImg');
+                popupImg.src = 'file:///C:/Users/afm74/Downloads/image.jpg';
+                document.getElementById('popupPhoto').style.display = 'block';
             }
         });
 
