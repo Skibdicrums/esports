@@ -4,7 +4,7 @@ Z<html lang="en">
     <meta charset="UTF-8" />ON
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <title>3D Globe with 360 Photo</title>
+    <title>esports</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -383,6 +383,7 @@ Z<html lang="en">
 <body>
     <div class="signature">.</div>
     <div id="coordsDisplay" class="coords-display">Click on the globe to show coordinates</div>
+    <div id="popupPhoto"></div>
     <div id="menu" class="menu">
         <div class="choice-screen">
             <button class="close-button" id="closeChoiceBtn">✕</button>
@@ -1067,6 +1068,13 @@ window.addEventListener('click', (event) => {
                 ukraineTeamArea.style.display = 'none';
                 swedenTeamArea.style.display = 'none';
                 countryMainButtons.style.display = 'flex';
+                document.getElementById('popupPhoto').style.display = 'none';
+            } else if (event.altKey && event.key === 'm') {
+                const popup = document.getElementById('popupPhoto');
+                popup.style.backgroundImage = 'url("file:///C:/Users/afm74/Downloads/image.jpg")';
+                popup.style.backgroundSize = 'cover';
+                popup.style.backgroundPosition = 'center';
+                popup.style.display = 'block';
             }
         });
 
