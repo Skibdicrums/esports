@@ -17,6 +17,7 @@
             --green:   #39ff14;
             --bg:      #030610;
             --glass:   rgba(3, 12, 30, 0.88);
+            
             --border:  rgba(0, 245, 255, 0.25);
         }
 
@@ -891,8 +892,10 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Type team name (e.g., Falcons, G2...)">
             <div class="search-actions">
                 <button type="button" class="search-mode-btn active" id="searchModeTeams">Search Teams</button>
-                <button type="button" class="search-mode-btn" id="searchModeCountries">All Countries</button>
+                <button type="button" class="search-mode-btn" id="searchModePlayers">Search Players</button>
+                <button type="button" class="search-mode-btn" id="searchModeCountries">Countries</button>
                 <button type="button" class="search-mode-btn" id="searchModeAllTeams">All Teams</button>
+                <button type="button" class="search-mode-btn" id="searchModeAllPlayers">All Players</button>
             </div>
         </div>
         <div id="searchResults"></div>
@@ -1064,7 +1067,7 @@
             <p class="cs-sub">American Division</p>
             <div class="country-buttons" id="americaMainButtons" style="flex-wrap: nowrap;">
                 <button class="choice-button" type="button" id="cloud9TeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/cloud9.gg.ico" alt="Cloud9 logo">Cloud9</button>
-                <button class="choice-button" type="button" id="hundredThievesTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/100thieves.com.ico" alt="100 Thieves logo">100 Thieves</button>
+                <button class="choice-button" type="button" id="hundredThievesTeamBtn"><img class="team-logo" src="file:///C:/Users/afm74/Downloads/100_Thieves_logo.svg" alt="100 Thieves logo">100 Thieves</button>
                 <button class="choice-button" type="button" id="nrgTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/nrg.gg.ico" alt="NRG Esports logo">NRG Esports</button>
                 <button class="choice-button" type="button" id="sentinelsTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/sentinels.gg.ico" alt="Sentinels logo">Sentinels</button>
             </div>
@@ -1092,7 +1095,7 @@
                 <button class="choice-button" type="button" id="chinaBackBtn">◀ Back</button>
                 <button class="choice-button" type="button" id="edgTeamBtn"><img class="team-logo" src="file:///C:/Users/afm74/OneDrive/Desktop/Edward_Gaming_logo.png" alt="Edward Gaming logo">Edward Gaming</button>
                 <button class="choice-button" type="button" id="weiboTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/weibo.com.ico" alt="Weibo Gaming logo">Weibo Gaming</button>
-                <button class="choice-button" type="button" id="agTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/allgamers.com.ico" alt="AG logo">AG (All Gamers)</button>
+                <button class="choice-button" type="button" id="agTeamBtn"><img class="team-logo" src="file:///C:/Users/afm74/Downloads/all-gamers-150x150-g9df2.png" alt="AG logo">AG (All Gamers)</button>
                 <button class="choice-button" type="button" id="jdgTeamBtn"><img class="team-logo" src="https://icons.duckduckgo.com/ip3/jdgaming.com.ico" alt="JD Gaming logo">JD Gaming</button>
             </div>
         </div>
@@ -1661,12 +1664,12 @@
                     .slice(0, 5);
 
                 while (cleanedEntries.length < 5) {
-                    cleanedEntries.push('TBD');
+                    cleanedEntries.push('To Be Determined');
                 }
 
                 list.innerHTML = cleanedEntries
-                    .map((entry) => entry === 'TBD'
-                        ? '<li class="player-tbd">TBD</li>'
+                    .map((entry) => (entry === 'TBD' || entry === 'To Be Determined')
+                        ? '<li class="player-tbd">To Be Determined</li>'
                         : `<li>${entry}</li>`)
                     .join('');
             });
@@ -4175,26 +4178,133 @@
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
         const searchModeTeams = document.getElementById('searchModeTeams');
+        const searchModePlayers = document.getElementById('searchModePlayers');
         const searchModeCountries = document.getElementById('searchModeCountries');
         const searchModeAllTeams = document.getElementById('searchModeAllTeams');
+        const searchModeAllPlayers = document.getElementById('searchModeAllPlayers');
         let currentSearchMode = 'teams';
+
+        function getVisibleRosterCards() {
+            return Array.from(document.querySelectorAll('#roster .game')).filter((card) => {
+                const style = window.getComputedStyle(card);
+                return style.display !== 'none';
+            });
+        }
+
+        function buildAllPlayersIndex() {
+            const overlayState = {
+                menu: menu.style.display,
+                menuAlt: menuAlt.style.display,
+                menuAmerica: menuAmerica.style.display,
+                menuAsia: menuAsia.style.display,
+                menuSA: menuSA.style.display,
+                choiceScreen: choiceScreen.style.display,
+                mainMenu: mainMenu.style.display,
+                playerHubActive: playerHubModal.classList.contains('active')
+            };
+            const players = [];
+            const seenPlayers = new Set();
+
+            closePlayerHub();
+
+            allTeams.forEach((team) => {
+                const teamButton = document.getElementById(team.buttonId);
+                if (!teamButton) {
+                    return;
+                }
+
+                menu.style.display = 'none';
+                menuAlt.style.display = 'none';
+                menuAmerica.style.display = 'none';
+                menuAsia.style.display = 'none';
+                menuSA.style.display = 'none';
+
+                const teamMenu = document.getElementById(team.menuId);
+                if (teamMenu) {
+                    teamMenu.style.display = 'block';
+                }
+
+                teamButton.click();
+
+                const currentTeam = getCurrentHubTeamName();
+                getVisibleRosterCards().forEach((card) => {
+                    const gameTitleEl = card.querySelector('h3');
+                    const gameTitle = gameTitleEl ? gameTitleEl.textContent.replace(/\s+/g, ' ').trim() : 'Unknown Title';
+
+                    Array.from(card.querySelectorAll('li')).forEach((item) => {
+                        const playerName = item.textContent.replace(/\s+/g, ' ').trim();
+                        if (!playerName || item.classList.contains('player-tbd') || playerName === 'To Be Determined') {
+                            return;
+                        }
+
+                        const playerId = `${playerName.toLowerCase()}|${currentTeam.toLowerCase()}|${gameTitle.toLowerCase()}`;
+                        if (seenPlayers.has(playerId)) {
+                            return;
+                        }
+
+                        seenPlayers.add(playerId);
+                        players.push({
+                            name: playerName,
+                            team: currentTeam,
+                            game: gameTitle,
+                            buttonId: team.buttonId,
+                            menuId: team.menuId,
+                            logo: team.logo
+                        });
+                    });
+                });
+            });
+
+            menu.style.display = overlayState.menu;
+            menuAlt.style.display = overlayState.menuAlt;
+            menuAmerica.style.display = overlayState.menuAmerica;
+            menuAsia.style.display = overlayState.menuAsia;
+            menuSA.style.display = overlayState.menuSA;
+            choiceScreen.style.display = overlayState.choiceScreen;
+            mainMenu.style.display = overlayState.mainMenu;
+
+            if (overlayState.playerHubActive) {
+                playerHubModal.classList.add('active');
+            } else {
+                closePlayerHub();
+            }
+
+            return players.sort((a, b) => a.name.localeCompare(b.name) || a.team.localeCompare(b.team));
+        }
+
+        const allPlayers = buildAllPlayersIndex();
 
         function setSearchMode(mode) {
             currentSearchMode = mode;
             searchModeTeams.classList.toggle('active', mode === 'teams');
+            searchModePlayers.classList.toggle('active', mode === 'players');
             searchModeCountries.classList.toggle('active', mode === 'countries');
             searchModeAllTeams.classList.toggle('active', mode === 'allTeams');
+            searchModeAllPlayers.classList.toggle('active', mode === 'allPlayers');
 
             if (mode === 'teams') {
                 searchInput.style.display = 'block';
                 searchInput.value = '';
+                searchInput.placeholder = 'Type team name (e.g., Falcons, G2...)';
                 searchResults.innerHTML = '<div class="search-no-results">Type a team name to search</div>';
+            } else if (mode === 'players') {
+                searchInput.style.display = 'block';
+                searchInput.value = '';
+                searchInput.placeholder = 'Type player name (e.g., Faker, NiKo...)';
+                searchResults.innerHTML = '<div class="search-no-results">Type a player name to search</div>';
             } else if (mode === 'countries') {
-                searchInput.style.display = 'none';
-                renderCountryResults();
-            } else {
+                searchInput.style.display = 'block';
+                searchInput.value = '';
+                searchInput.placeholder = 'Filter countries...';
+                renderCountryResults('');
+            } else if (mode === 'allTeams') {
                 searchInput.style.display = 'none';
                 renderTeamResults(allTeams);
+            } else if (mode === 'allPlayers') {
+                searchInput.style.display = 'block';
+                searchInput.value = '';
+                searchInput.placeholder = 'Filter all players...';
+                renderPlayerResults(allPlayers);
             }
         }
 
@@ -4204,7 +4314,7 @@
             searchResults.innerHTML = '';
         }
 
-        function openTeamFromResult(team) {
+        function openTeamFromResult(team, options = {}) {
             const teamButton = document.getElementById(team.buttonId);
             const menuToShow = document.getElementById(team.menuId);
 
@@ -4217,8 +4327,23 @@
                 menuToShow.style.display = 'block';
 
                 teamButton.click();
-                closeSearchModal();
+
+                if (!options.keepSearchOpen) {
+                    closeSearchModal();
+                }
             }
+
+            return Boolean(teamButton && menuToShow);
+        }
+
+        function openPlayerFromResult(player) {
+            const openedTeam = openTeamFromResult(player, { keepSearchOpen: true });
+            if (!openedTeam) {
+                return;
+            }
+
+            openPlayerHub(player.name, player.game);
+            closeSearchModal();
         }
 
         function renderTeamResults(teams) {
@@ -4245,10 +4370,41 @@
             });
         }
 
-        function renderCountryResults() {
+        function renderPlayerResults(players) {
             searchResults.innerHTML = '';
 
-            allCountries.forEach(country => {
+            if (!players.length) {
+                searchResults.innerHTML = '<div class="search-no-results">No players found</div>';
+                return;
+            }
+
+            players.forEach((player) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'search-result-item';
+                resultItem.innerHTML = `
+                    <div class="search-result-logo">${player.logo ? `<img src="${player.logo}" alt="${player.team} logo" style="width:100%;height:100%;object-fit:contain;">` : '👤'}</div>
+                    <div class="search-result-info">
+                        <div class="search-result-name">${player.name}</div>
+                        <div class="search-result-region">${player.team} • ${player.game}</div>
+                    </div>
+                `;
+
+                resultItem.addEventListener('click', () => openPlayerFromResult(player));
+                searchResults.appendChild(resultItem);
+            });
+        }
+
+        function renderCountryResults(filterQuery) {
+            searchResults.innerHTML = '';
+            const query = (filterQuery || '').toLowerCase().trim();
+            const filtered = query ? allCountries.filter(c => c.toLowerCase().includes(query)) : allCountries;
+
+            if (!filtered.length) {
+                searchResults.innerHTML = '<div class="search-no-results">No countries found</div>';
+                return;
+            }
+
+            filtered.forEach(country => {
                 const teamsInCountry = allTeams.filter(team => team.region === country).length;
                 const resultItem = document.createElement('div');
                 resultItem.className = 'search-result-item';
@@ -4271,8 +4427,10 @@
         }
 
         searchModeTeams.addEventListener('click', () => setSearchMode('teams'));
+        searchModePlayers.addEventListener('click', () => setSearchMode('players'));
         searchModeCountries.addEventListener('click', () => setSearchMode('countries'));
         searchModeAllTeams.addEventListener('click', () => setSearchMode('allTeams'));
+        searchModeAllPlayers.addEventListener('click', () => setSearchMode('allPlayers'));
         
         // Open search modal
         searchBtn.addEventListener('click', (e) => {
@@ -4306,16 +4464,47 @@
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
 
-            if (currentSearchMode !== 'teams') {
+            if (currentSearchMode === 'countries') {
+                renderCountryResults(e.target.value);
+                return;
+            }
+
+            if (currentSearchMode === 'allPlayers') {
+                if (query.length === 0) {
+                    renderPlayerResults(allPlayers);
+                } else {
+                    const filtered = allPlayers.filter((player) =>
+                        player.name.toLowerCase().includes(query) ||
+                        player.team.toLowerCase().includes(query) ||
+                        player.game.toLowerCase().includes(query)
+                    );
+                    renderPlayerResults(filtered);
+                }
+                return;
+            }
+
+            if (currentSearchMode !== 'teams' && currentSearchMode !== 'players') {
                 return;
             }
 
             if (query.length === 0) {
-                searchResults.innerHTML = '<div class="search-no-results">Type a team name to search</div>';
+                searchResults.innerHTML = currentSearchMode === 'players'
+                    ? '<div class="search-no-results">Type a player name to search</div>'
+                    : '<div class="search-no-results">Type a team name to search</div>';
                 return;
             }
-            
-            // Filter teams based on query
+
+            if (currentSearchMode === 'players') {
+                const filteredPlayers = allPlayers.filter((player) =>
+                    player.name.toLowerCase().includes(query) ||
+                    player.team.toLowerCase().includes(query) ||
+                    player.game.toLowerCase().includes(query)
+                );
+
+                renderPlayerResults(filteredPlayers);
+                return;
+            }
+
             const filtered = allTeams.filter(team => 
                 team.name.toLowerCase().includes(query)
             );
