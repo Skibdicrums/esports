@@ -918,6 +918,10 @@
                     <ul id="playerHubHistory"></ul>
                 </section>
                 <section class="playerhub-block">
+                    <h3>Player Club History</h3>
+                    <ul id="playerHubClubHistory"></ul>
+                </section>
+                <section class="playerhub-block">
                     <h3>Teams Over The Years</h3>
                     <div id="playerHubTimeline"></div>
                 </section>
@@ -1651,14 +1655,55 @@
             const teamName = normalizeTeamName(rawTeamName) || 'Team';
             const rosterTitle = document.querySelector('#roster h2');
             const gameCards = Array.from(document.querySelectorAll('#roster .game'));
+            const nonGameTitleHints = [
+                'organization growth',
+                'content division',
+                'academy & development',
+                'academy and development',
+                'other games'
+            ];
+            const unconfirmedRostersByTeam = {
+                powr: ['Valorant', 'Rocket League', 'EA Sports FC'],
+                twistedminds: ['Valorant', 'Overwatch 2', 'Rainbow Six Siege'],
+                brightfutureesportsteam: ['League of Legends', 'Counter-Strike 2', 'Apex Legends'],
+                teamfalcons: ['Dota 2', 'Valorant', 'Honor of Kings'],
+                fnatic: ['Rocket League', 'PUBG: Battlegrounds'],
+                ninjasinpyjamas: ['Valorant', 'Rocket League'],
+                g2esports: ['Apex Legends', 'Rocket League'],
+                teamheretics: ['Counter-Strike 2', 'Rocket League'],
+                mouz: ['Valorant', 'Dota 2'],
+                natusvincere: ['Valorant', 'Rocket League'],
+                cloud9: ['Counter-Strike 2', 'Apex Legends'],
+                '100thieves': ['Counter-Strike 2', 'Rocket League'],
+                nrgesports: ['PUBG: Battlegrounds', 'Rocket League'],
+                sentinels: ['Counter-Strike 2', 'Apex Legends'],
+                t1: ['Counter-Strike 2', 'Valorant Mobile'],
+                geng: ['Counter-Strike 2', 'Apex Legends'],
+                edwardgaming: ['Counter-Strike 2', 'Rocket League'],
+                weibogaming: ['Valorant', 'Rocket League'],
+                allgamers: ['Valorant', 'Rocket League'],
+                jdgaming: ['Valorant', 'Counter-Strike 2'],
+                furiaesports: ['Rocket League', 'PUBG: Battlegrounds'],
+                leviatan: ['Counter-Strike 2', 'Rocket League'],
+                '9zteam': ['Valorant', 'Apex Legends']
+            };
 
             if (rosterTitle) {
                 rosterTitle.textContent = `${teamName} Roster`;
             }
 
-            gameCards.forEach((card, index) => {
-                card.style.display = index < 3 ? 'block' : 'none';
-                if (index >= 3) return;
+            gameCards.forEach((card) => {
+                const titleEl = card.querySelector('h3');
+                const titleText = titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim().toLowerCase() : '';
+                const isNonGameCard = card.classList.contains('game-note') ||
+                    nonGameTitleHints.some((hint) => titleText.includes(hint));
+
+                if (isNonGameCard) {
+                    card.style.display = 'none';
+                    return;
+                }
+
+                card.style.display = 'block';
 
                 const list = card.querySelector('ul');
                 if (!list) return;
@@ -1678,6 +1723,37 @@
                         : `<li>${entry}</li>`)
                     .join('');
             });
+
+            const rosterPane = document.getElementById('roster');
+            if (!rosterPane) {
+                return;
+            }
+
+            let unconfirmedCard = document.getElementById('unconfirmedRostersCard');
+            if (!unconfirmedCard) {
+                unconfirmedCard = document.createElement('div');
+                unconfirmedCard.id = 'unconfirmedRostersCard';
+                unconfirmedCard.className = 'game';
+                unconfirmedCard.innerHTML = `
+                    <h3>⚠ Unconfirmed Rosters</h3>
+                    <ul id="unconfirmedRostersList"></ul>
+                `;
+                rosterPane.appendChild(unconfirmedCard);
+            }
+
+            const unconfirmedList = document.getElementById('unconfirmedRostersList');
+            const teamKey = playerKey(teamName);
+            const unconfirmedGames = unconfirmedRostersByTeam[teamKey] || [];
+
+            if (!unconfirmedList || unconfirmedGames.length === 0) {
+                unconfirmedCard.style.display = 'none';
+                return;
+            }
+
+            unconfirmedCard.style.display = 'block';
+            unconfirmedList.innerHTML = unconfirmedGames
+                .map((game) => `<li class="player-tbd">${game} - Roster not confirmed</li>`)
+                .join('');
         }
 
         const playerHubModal = document.getElementById('playerHubModal');
@@ -1686,6 +1762,7 @@
         const playerHubSub = document.getElementById('playerHubSub');
         const playerHubAchievements = document.getElementById('playerHubAchievements');
         const playerHubHistory = document.getElementById('playerHubHistory');
+        const playerHubClubHistory = document.getElementById('playerHubClubHistory');
         const playerHubTimeline = document.getElementById('playerHubTimeline');
 
         const playerProfiles = {
@@ -2736,6 +2813,17 @@
             }
         };
 
+        const playerRealNameOverrides = {
+            rw9: 'Mossaad Al-Dossary',
+            kiileerrz: 'Abdulaziz Al-Dossary',
+            kyxsan: 'Damjan Stoilkovski',
+            teses: 'Rene Madsen',
+            kyousuke: 'Maxim Lukin',
+            imperialhal: 'Phillip Dosen',
+            zer0: 'Rhys Perry',
+            tgltn: 'James Giezen'
+        };
+
         function playerKey(name) {
             return String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
         }
@@ -2763,13 +2851,48 @@
             };
         }
 
+        function extractRealNameFromProfile(profile) {
+            if (!profile || !Array.isArray(profile.history)) {
+                return '';
+            }
+
+            for (const line of profile.history) {
+                const text = String(line || '').replace(/\s+/g, ' ').trim();
+                const fullNameMatch = text.match(/^([A-Za-zÀ-ÖØ-öø-ÿ.'\-\s]+)\s+"[^"]+"\s+([A-Za-zÀ-ÖØ-öø-ÿ.'\-\s]+)/);
+                if (fullNameMatch && fullNameMatch[1] && fullNameMatch[2]) {
+                    return `${fullNameMatch[1]} ${fullNameMatch[2]}`.replace(/\s+/g, ' ').trim();
+                }
+
+                const leftSideMatch = text.match(/^([A-Za-zÀ-ÖØ-öø-ÿ.'\-\s]+)\s+"[^"]+"/);
+                if (leftSideMatch && leftSideMatch[1]) {
+                    return leftSideMatch[1].replace(/\s+/g, ' ').trim();
+                }
+            }
+
+            return '';
+        }
+
+        function getPlayerIdentity(playerName, profile) {
+            const esportsName = String(playerName || 'Unknown Player').replace(/\s+/g, ' ').trim();
+            const key = playerKey(esportsName);
+            const mappedRealName = playerRealNameOverrides[key] || '';
+            const profileRealName = extractRealNameFromProfile(profile);
+            const realName = mappedRealName || profileRealName || 'Not publicly listed';
+            return {
+                esportsName,
+                realName
+            };
+        }
+
         function openPlayerHub(playerName, gameTitle) {
             const currentTeam = getCurrentHubTeamName();
             const key = playerKey(playerName);
             const profile = playerProfiles[key] || buildFallbackPlayerProfile(playerName, currentTeam, gameTitle);
+            const identity = getPlayerIdentity(playerName, profile);
 
-            playerHubName.textContent = `${playerName} Hub`;
-            playerHubSub.textContent = `${currentTeam} • ${gameTitle}`;
+            const displayName = identity.realName !== 'Not publicly listed' ? identity.realName : identity.esportsName;
+            playerHubName.textContent = `${displayName} Hub`;
+            playerHubSub.textContent = `${currentTeam} • ${gameTitle} • Esports Name: ${identity.esportsName} • Real Name: ${identity.realName}`;
 
             playerHubAchievements.innerHTML = profile.achievements
                 .map((item) => `<li>${item}</li>`)
@@ -2778,6 +2901,11 @@
             playerHubHistory.innerHTML = profile.history
                 .map((item) => `<li>${item}</li>`)
                 .join('');
+
+            playerHubClubHistory.innerHTML = (Array.isArray(profile.timeline) && profile.timeline.length
+                ? profile.timeline.map((row) => `<li>${row.years} • ${row.team}</li>`)
+                : [`<li>Current • ${currentTeam}</li>`]
+            ).join('');
 
             playerHubTimeline.innerHTML = profile.timeline
                 .map((row) => `
