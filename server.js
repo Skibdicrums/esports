@@ -6,7 +6,7 @@ const fetch   = require('node-fetch');
 const path    = require('path');
 
 const app  = express();
-const PORT = 8787;
+const PORT = Number(process.env.PORT) || 8787;
 
 // ── CORS so the HTML page at file:// or a different port can call us ──
 app.use(cors());
@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname)));
 
 // ── Root route: serve the HTML file ──
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index (poopnew).html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ───────────────────────────────────────────────
@@ -213,7 +213,11 @@ app.get('/api/health', (_req, res) => res.json({ ok: true, port: PORT }));
 // ───────────────────────────────────────────────
 //  Start
 // ───────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`\n  MetaPulse server running → http://localhost:${PORT}`);
-  console.log(`  Open: http://localhost:${PORT}/index%20(poopnew).html\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n  MetaPulse server running → http://localhost:${PORT}`);
+    console.log(`  Open: http://localhost:${PORT}/\n`);
+  });
+}
+
+module.exports = app;
