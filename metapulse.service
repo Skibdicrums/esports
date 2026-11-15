@@ -1,0 +1,24 @@
+# systemd service to keep the Node.js server running on the VPS
+# Place at: /etc/systemd/system/metapulse.service
+# Then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable metapulse
+#   sudo systemctl start metapulse
+
+[Unit]
+Description=MetaPulse Esports Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/metapulse
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
