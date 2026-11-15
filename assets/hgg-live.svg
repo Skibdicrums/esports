@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-label="HGG LIVE logo">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <rect x="30" y="40" width="680" height="260" rx="26" fill="#e20808" filter="url(#shadow)"/>
+
+  <g transform="translate(560, 62)">
+    <g fill="#d90505" opacity="0.9">
+      <circle cx="120" cy="50" r="26"/>
+      <path d="M148 50c0-26 21-47 47-47s47 21 47 47-21 47-47 47-47-21-47-47zm38 0c0-16 13-29 29-29s29 13 29 29-13 29-29 29-29-13-29-29z" opacity="0.9"/>
+      <path d="M184 50c0-37 30-67 67-67s67 30 67 67-30 67-67 67-67-30-67-67zm49 0c0-25 20-45 45-45s45 20 45 45-20 45-45 45-45-20-45-45z" opacity="0.75"/>
+      <path d="M228 50c0-47 38-85 85-85s85 38 85 85-38 85-85 85-85-38-85-85zm62 0c0-29 23-52 52-52s52 23 52 52-23 52-52 52-52-23-52-52z" opacity="0.58"/>
+    </g>
+  </g>
+
+  <text x="360" y="220" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="180" fill="#ffffff" letter-spacing="2">LIVE</text>
+</svg>

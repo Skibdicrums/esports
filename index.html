@@ -6900,6 +6900,15 @@
                     closeSearchModal();
                 }
 
+                function refreshGamesDotLogo() {
+                    if (!gamesDotLogo) {
+                        return;
+                    }
+        
+                    gamesDotLogo.src = 'assets/hgg-live.svg';
+                    gamesDotLogo.alt = 'HGG logo';
+                }
+        
                 refreshGamesDotLogo();
             }
 
